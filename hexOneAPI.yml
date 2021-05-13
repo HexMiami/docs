@@ -1,0 +1,449 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: hexOneAPI
+servers:
+  - url: "http://localhost/"
+paths:
+  /auth/login:
+    post:
+      summary: "Authenticate to box"
+      operationId: api.api.login
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /auth/change_password:
+    post:
+      summary: "Change password to box"
+      operationId: api.api.change_password
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /action:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Requests HexONE to perform an action. Returns a UUID that you can poll for status via GET /action/{id}"
+      operationId: api.api.performAction
+      tags:
+        - action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActionRequest"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionPostResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /action/clear_queue:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Requests HexONE to clear its action queue."
+      operationId: api.api.clearActionQueue
+      tags:
+        - action
+      responses:
+        "200":
+          description: "Queue got cleared"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /action/{id}:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get information about the action with id {id}"
+      operationId: api.api.getActionStatus
+      tags:
+        - action
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: uuid.v4 of the action to get
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionGetResponse"
+  /telemetry:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Gets telemetry."
+      operationId: api.api.getTelemetry
+      tags:
+        - status
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TelemetryResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /telemetry/stream:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Gets telemetry but as a stream."
+      operationId: api.api.getTelemetryStream
+      tags:
+        - status
+      responses:
+        default:
+          description: "telemetry"
+          content:
+            text/event-stream:
+              schema:
+                $ref: "#/components/schemas/TelemetryResponse"
+  /health:
+    get:
+      summary: "Returns a 200 if we are online"
+      operationId: api.api.health
+      tags:
+        - status
+      responses:
+        "200":
+          description: "HexONE is online."
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /hexone_logs:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get HexONE API Logs"
+      operationId: api.api.getHexOneLogs
+      tags:
+        - logs
+      responses:
+        "200":
+          description: "logs text file"
+          content:
+            text/plain:
+              schema:
+                type: string
+  /system_logs:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Returns /var/log/syslog from HexOS."
+      operationId: api.api.getSystemLogs
+      tags:
+        - logs
+      responses:
+        "200":
+          description: "syslog"
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.api.verify_token
+    cookieBearer:
+      type: apiKey
+      name: token
+      in: cookie
+      x-apikeyInfoFunc: api.api.verify_apikey
+  schemas:
+    Command:
+      type: string
+      enum:
+        [
+          openbox,
+          closebox,
+          powerondrone,
+          poweroffdrone,
+          swapbattery,
+          lightson,
+          lightsoff,
+        ]
+    ActionRequest:
+      type: object
+      required:
+        - command
+      properties:
+        command:
+          $ref: "#/components/schemas/Command"
+        callback_url:
+          type: string
+          description: "A URL to which you want action (command) status updates sent. Expect the ActionGetResponse type."
+          format: url
+      example:
+        command: openbox
+        callback_url: https://example.com/status
+    ActionPostResponse:
+      type: object
+      required:
+        - request_id
+      properties:
+        request_id:
+          type: string
+      example:
+        request_id: "fc63c4f149604c54ad5349aa7779f9b8"
+    ActionGetResponse:
+      type: object
+      required:
+        - request_id
+        - status
+        - command
+      properties:
+        request_id:
+          type: string
+        status:
+          type: string
+          enum: [unknown, queued, inprogress, done, failed, cancelled]
+        command:
+          $ref: "#/components/schemas/Command"
+    TelemetryResponse:
+      type: object
+      required:
+        - status
+        - battery_info
+        - lights
+        - climate
+        - motors
+        - error_message
+        - time
+      properties:
+        status:
+          type: object
+          required:
+            - operation
+            - system
+            - door
+            - pad
+            - internal_temperature
+          properties:
+            operation:
+              type: boolean
+            system:
+              type: string
+            door:
+              type: string
+              enum: [open, closed]
+            pad:
+              type: string
+              enum: [empty, occupied]
+            internal_temperature:
+              type: number
+        battery_info:
+          type: object
+          required:
+            - batteries
+            - current_battery
+            - next_battery
+          properties:
+            batteries:
+              type: array
+              items:
+                $ref: "#/components/schemas/BatteryStatus"
+            current_battery:
+              type: integer
+            next_battery:
+              type: integer
+        lights:
+          type: array
+          items:
+            $ref: "#/components/schemas/LightStatus"
+        climate:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClimateStatus"
+        motors:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorStatus"
+        error_message:
+          type: string
+          example: "Drone is in the bathroom"
+        time:
+          type: number
+    BatteryStatus:
+      type: object
+      required:
+        - name
+        - voltage
+        - current
+        - on_off
+      properties:
+        name:
+          type: string
+        voltage:
+          type: number
+        current:
+          type: number
+        on_off:
+          type: string
+          enum: [ON, OFF]
+        # status:
+        #   type: string
+        #   enum: [healthy, warning, unusable, empty]
+    LightStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        - pwm_color
+        - pwm_power
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        pwm_color:
+          type: number
+        pwm_power:
+          type: number
+    ClimateStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        - on_off
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        on_off:
+          type: string
+          enum: [ON, OFF]
+    MotorStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        - position
+        - encoder
+        - power
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        position:
+          type: number
+        encoder:
+          type: number
+        power:
+          type: number
+    PasswordPayload:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      required:
+        - access_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+    ChangePasswordPayload:
+      type: object
+      required:
+        - current_password
+        - new_password
+      properties:
+        current_password:
+          type: string
+        new_password:
+          type: string
+    ApiError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: number
+          format: int32
+        message:
+          type: string
+      example:
+        code: 500
+        message: despacito
