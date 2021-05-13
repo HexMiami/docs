@@ -1,0 +1,27 @@
+on: [repository_dispatch, workflow_dispatch]
+
+name: "Update API Specs"
+
+jobs:
+  update-specs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: 
+         - path: "src/hexONE/v2/api/src/api/swagger/api.yml"
+           name: "hexOneAPI.yml"
+         - path: "src/hexCloud/server/api.yml"
+           name: "hexCloudAPI.yml"
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@main
+
+      - name: Get Api Spec
+        id: get-api-spec
+        run: "curl -H 'Authorization: token ${{ secrets.HEX_ACCESS_TOKEN }}' -H 'Accept: application/vnd.github.v4.raw' -o ${{ matrix.file.name }} -L https://api.github.com/repos/Hextronics-LLC/hexONE/contents/${{ matrix.file.path }}"
+
+      - name: add-and-commit
+        uses: EndBug/add-and-commit@v7
+        with:
+          branch: main
+          message: "Update ${{matrix.file.name}}"
