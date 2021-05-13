@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: hexOneCloudAPI
+servers:
+  - url: "http://localhost:8080/"
+paths:
+  /stations:
+    get:
+      description: "Gets all a users stations"
+      operationId: getStations
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Station"
+  /station/{id}:
+    get:
+      description: "Gets a specific station"
+      operationId: getStation
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+    put:
+      description: "Update a specific station"
+      operationId: putStation
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StationNewPayload"
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+    delete:
+      description: "Delete a specific station"
+      operationId: deleteStation
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+  /station:
+    post:
+      description: "Create a new station"
+      operationId: postStation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StationNewPayload"
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Station"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    StationNewPayload:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "hexone-abc0def0"
+        description:
+          type: string
+          example: "South of Barn"
+    StationUpdatePayload:
+      $ref: "#/components/schemas/StationNewPayload"
+    Station:
+      type: object
+      required:
+        - id
+        - owner
+        - name
+      properties:
+        id:
+          $ref: "#/components/schemas/ID"
+        owner:
+          type: string
+          description: the user id of the owner (auth0)
+        name:
+          type: string
+          example: "hexone-abc0def0"
+        description:
+          type: string
+          example: "South of Barn"
+    ID:
+      type: string
