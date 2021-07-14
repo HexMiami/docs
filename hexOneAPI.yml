@@ -3,7 +3,7 @@ info:
   version: 0.1.0
   title: hexOneAPI
 servers:
-  - url: "http://localhost/"
+  - url: http://localhost:8080
 paths:
   /auth/login:
     post:
@@ -20,6 +20,21 @@ paths:
       responses:
         "200":
           description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /auth/logout:
+    post:
+      summary: "Deauthenticate to box"
+      operationId: api.api.logout
+      tags:
+        - auth
+      responses:
+        "200":
+          description: "logged out"
         default:
           description: Unexpected error
           content:
@@ -93,6 +108,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /action/recent:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Gets statuses of recent commands."
+      operationId: api.api.getRecentCommands
+      tags:
+        - action
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActionGetResponse"
   /action/{id}:
     get:
       security:
@@ -138,22 +171,128 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /telemetry/stream:
+  /telemetry/battery_history:
     get:
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Gets telemetry but as a stream."
-      operationId: api.api.getTelemetryStream
+      summary: "Get last 6 hours of battery history"
+      operationId: api.api.getBatteryHistory
       tags:
         - status
+        - batteries
       responses:
-        default:
-          description: "telemetry"
+        "200":
+          description: "battery history"
           content:
-            text/event-stream:
+            application/json:
               schema:
-                $ref: "#/components/schemas/TelemetryResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/BatteryHistory"
+  /telemetry/temperature_history:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get last 6 hours of temperature history"
+      operationId: api.api.getTemperatureHistory
+      tags:
+        - status
+        - temperature
+      responses:
+        "200":
+          description: "temperature history"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TemperatureHistory"
+  /toggle/{thing}/{toggle}:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Toggle (enable or disable) power on battery port #id (1-6)"
+      operationId: api.api.putThingToggle
+      tags:
+        - peripherals
+      parameters:
+        - in: path
+          name: thing
+          schema:
+            type: string
+            enum:
+              - heater
+              - cooler
+              - remotecontrol
+              - odroid
+          required: true
+          description: name of thing to toggle
+        - in: path
+          name: toggle
+          schema:
+            type: string
+            enum: [enable, disable]
+          required: true
+          description: whether to enable or disable the power to the thing {thing}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callback_url:
+                  type: string
+                  format: url
+                  description: callback url for when battery action is complete
+                  example: http://example.com/ilikecorgis/
+      responses:
+        "200":
+          description: "Request Info for toggling thing."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionPostResponse"
+  /advanced/offsets:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current set of sku offsets"
+      operationId: api.api.getSkuOffsets
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The current sku offsets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsets"
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update sku offsets"
+      operationId: api.api.putSkuOffsets
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        description: "The current sku offsets"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkuOffsets"
+      responses:
+        "200":
+          description: "The current sku offsets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsets"
   /health:
     get:
       summary: "Returns a 200 if we are online"
@@ -169,6 +308,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /version:
+    get:
+      summary: "Get HexONE Version"
+      operationId: api.api.getHexOneVersion
+      tags:
+        - version
+      responses:
+        "200":
+          description: "successfully tells the version"
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - version
+                properties:
+                  version:
+                    type: string
   /hexone_logs:
     get:
       security:
@@ -226,6 +383,7 @@ components:
           swapbattery,
           lightson,
           lightsoff,
+          calibrate,
         ]
     ActionRequest:
       type: object
@@ -269,6 +427,7 @@ components:
       required:
         - status
         - battery_info
+        - toggles
         - lights
         - climate
         - motors
@@ -283,6 +442,8 @@ components:
             - door
             - pad
             - internal_temperature
+            - swaps_performed
+            - location
           properties:
             operation:
               type: boolean
@@ -296,6 +457,13 @@ components:
               enum: [empty, occupied]
             internal_temperature:
               type: number
+            swaps_performed:
+              type: integer
+            location:
+              type: array
+              items:
+                type: number
+              description: Coordinates [lat, lon]
         battery_info:
           type: object
           required:
@@ -311,6 +479,11 @@ components:
               type: integer
             next_battery:
               type: integer
+        toggles:
+          type: array
+          items:
+            $ref: "#/components/schemas/BatteryStatus"
+          description: "power status of toggles (odroid, rc, fans)"
         lights:
           type: array
           items:
@@ -348,14 +521,56 @@ components:
         # status:
         #   type: string
         #   enum: [healthy, warning, unusable, empty]
+    BatteryHistory:
+      type: object
+      required:
+        - name
+        - points
+      properties:
+        name:
+          type: string
+        points:
+          type: array
+          items:
+            type: object
+            required:
+              - voltage
+              - current
+              - on_off
+              - time
+            properties:
+              voltage:
+                type: number
+              current:
+                type: number
+              on_off:
+                type: string
+                enum: [ON, OFF]
+              time:
+                type: number
+                format: float64
+    TemperatureHistory:
+      type: object
+      required:
+        - time
+        - temperature
+      properties:
+        time:
+          type: number
+          description: seconds since Epoch
+          example: 1000000000000.11
+        temperature:
+          type: number
+          description: temperature in F
+          example: 69
     LightStatus:
       type: object
       required:
         - port
         - name
         - status
-        - pwm_color
-        - pwm_power
+        # - pwm_color
+        # - pwm_power
       properties:
         port:
           type: string
@@ -363,17 +578,17 @@ components:
           type: string
         status:
           type: string
-        pwm_color:
-          type: number
-        pwm_power:
-          type: number
+        # pwm_color:
+        #   type: number
+        # pwm_power:
+        #   type: number
     ClimateStatus:
       type: object
       required:
         - port
         - name
         - status
-        - on_off
+        - gates
       properties:
         port:
           type: string
@@ -381,9 +596,10 @@ components:
           type: string
         status:
           type: string
-        on_off:
-          type: string
-          enum: [ON, OFF]
+        gates:
+          type: array
+          items:
+            type: integer
     MotorStatus:
       type: object
       required:
@@ -406,6 +622,80 @@ components:
           type: number
         power:
           type: number
+    SkuOffsets:
+      type: object
+      required:
+        - ButtonX
+        - ButtonY
+        - ButtonZ
+        - ButtonZdown
+        - ButtonZup
+        - ZZTop
+        - DroneX
+        - DroneY
+        - DroneYback
+        - DroneYfront
+        - DroneZ
+        - DroneZup
+        - DroneZdown
+        - DroneZdrop
+        - DroneZMed
+        - BattX
+        - BattY
+        - BattYClose
+        - BattYSense
+        - BattYby
+        - BattZ
+        - BattZdown
+      properties:
+        ButtonX:
+          type: integer
+        ButtonY:
+          type: integer
+        ButtonZ:
+          type: integer
+        ButtonZdown:
+          type: integer
+        ButtonZup:
+          type: integer
+        ZZTop:
+          type: integer
+        DroneX:
+          type: integer
+        DroneY:
+          type: integer
+        DroneYback:
+          type: integer
+        DroneYfront:
+          type: integer
+        DroneZ:
+          type: integer
+        DroneZup:
+          type: integer
+        DroneZdown:
+          type: integer
+        DroneZdrop:
+          type: integer
+        DroneZMed:
+          type: integer
+        BattX:
+          type: array
+          items:
+            type: integer
+          minItems: 6
+          maxItems: 6
+        BattY:
+          type: integer
+        BattYClose:
+          type: integer
+        BattYSense:
+          type: integer
+        BattYby:
+          type: integer
+        BattZ:
+          type: integer
+        BattZdown:
+          type: integer
     PasswordPayload:
       type: object
       required:
