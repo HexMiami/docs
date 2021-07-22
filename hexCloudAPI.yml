@@ -57,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/StationNewPayload"
+              $ref: "#/components/schemas/StationUpdatePayload"
       responses:
         "200":
           description: "TODO"
@@ -103,6 +103,94 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Station"
+  /station/{id}/{rest}:
+    get:
+      description: "Authenticate to box and return data"
+      operationId: getStationData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: rest
+          description: "Rest of route"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      description: "Authenticate to box and post content"
+      operationId: postStationContent
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: rest
+          description: "Rest of route"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StationInteractPayload"
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      description: "Authenticate to box and updates content"
+      operationId: putStationContent
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: rest
+          description: "Rest of route"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StationInteractPayload"
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   securitySchemes:
     bearerAuth:
@@ -119,16 +207,46 @@ components:
         description:
           type: string
           example: "South of Barn"
+        password:
+          type: string
+          example: "password"
     StationUpdatePayload:
-      $ref: "#/components/schemas/StationNewPayload"
+      type: object
+      properties:
+        name:
+          type: string
+          example: "hexone-abc0def0"
+        description:
+          type: string
+          example: "South of Barn"
+        password:
+          type: string
+          example: "password"
+        newpassword:
+          type: string
+          example: "new password"
+        lastOnlineStatus:
+          type: boolean
+          example: false
+        lastTelemetry:
+          type: object
+        lastCheck:
+          type: number
+    StationInteractPayload:
+      type: object
+      properties:
+        content:
+          type: object
     Station:
       type: object
       required:
-        - id
+        - _id
         - owner
         - name
+        - lastOnlineStatus
+        - lastTelemetry
       properties:
-        id:
+        _id:
           $ref: "#/components/schemas/ID"
         owner:
           type: string
@@ -139,5 +257,166 @@ components:
         description:
           type: string
           example: "South of Barn"
+        lastOnlineStatus:
+          type: boolean
+          example: false
+        lastTelemetry:
+          type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/TelemetryResponse"
+            status:
+              type: number
+        lastCheck:
+          type: number
     ID:
       type: string
+    TelemetryResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          required:
+            - operation
+            - system
+            - door
+            - pad
+            - internal_temperature
+            - swaps_performed
+            - location
+          properties:
+            operation:
+              type: boolean
+            system:
+              type: string
+            door:
+              type: string
+              enum: [open, closed]
+            pad:
+              type: string
+              enum: [empty, occupied]
+            internal_temperature:
+              type: number
+            swaps_performed:
+              type: integer
+            location:
+              type: array
+              items:
+                type: number
+              description: Coordinates [lat, lon]
+        battery_info:
+          type: object
+          required:
+            - batteries
+            - current_battery
+            - next_battery
+          properties:
+            batteries:
+              type: array
+              items:
+                $ref: "#/components/schemas/BatteryStatus"
+            current_battery:
+              type: integer
+            next_battery:
+              type: integer
+        toggles:
+          type: array
+          items:
+            $ref: "#/components/schemas/BatteryStatus"
+          description: "power status of toggles (odroid, rc, fans)"
+        lights:
+          type: array
+          items:
+            $ref: "#/components/schemas/LightStatus"
+        climate:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClimateStatus"
+        motors:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorStatus"
+        error_message:
+          type: string
+          example: "Drone is in the bathroom"
+        time:
+          type: number
+    BatteryStatus:
+      type: object
+      required:
+        - name
+        - voltage
+        - current
+        - on_off
+      properties:
+        name:
+          type: string
+        voltage:
+          type: number
+        current:
+          type: number
+        on_off:
+          type: string
+          enum: [ON, OFF]
+        # status:
+        #   type: string
+        #   enum: [healthy, warning, unusable, empty]
+    LightStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        # - pwm_color
+        # - pwm_power
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        # pwm_color:
+        #   type: number
+        # pwm_power:
+        #   type: number
+    ClimateStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        - gates
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        gates:
+          type: array
+          items:
+            type: integer
+    MotorStatus:
+      type: object
+      required:
+        - port
+        - name
+        - status
+        - position
+        - encoder
+        - power
+      properties:
+        port:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        position:
+          type: number
+        encoder:
+          type: number
+        power:
+          type: number
