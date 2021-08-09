@@ -293,6 +293,115 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsets"
+  /advanced/batteries/enabled_slots:
+    get:
+      summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
+      operationId: api.api.getEnabledBatteries
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for battery enabled status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatterySlotsMask"
+    post:
+      summary: "update which batteries are enabled"
+      operationId: api.api.postEnabledBatteries
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatterySlotsMask"
+      responses:
+        "200":
+          description: "returns array of booleans for battery enabled status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatterySlotsMask"
+  /demo:
+    get:
+      summary: "returns whether the unit is in demo mode"
+      operationId: api.api.getDemoStatus
+      tags:
+        - demo
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "whether the unit is in demo mode"
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - demo_mode
+                  - configuration
+                properties:
+                  demo_mode:
+                    type: boolean
+                    default: false
+                    example: false
+                  configuration:
+                    $ref: "#/components/schemas/DemoConfig"
+  /demo/enable:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Enable Demo Mode"
+      operationId: api.api.postDemoEnable
+      tags:
+        - demo
+      requestBody:
+        required: true
+        description: "demo mode configuration"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DemoConfig"
+      responses:
+        "200":
+          description: "The current demo configuration offsets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemoConfig"
+  /demo/disable:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Enable disable Mode"
+      operationId: api.api.postDemoDisable
+      tags:
+        - demo
+      responses:
+        "200":
+          description: "The current demo configuration offsets"
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+                    default: "ok"
+                    example: "ok"
   /health:
     get:
       summary: "Returns a 200 if we are online"
@@ -696,6 +805,41 @@ components:
           type: integer
         BattZdown:
           type: integer
+    BatterySlotsMask:
+      type: array
+      items:
+        type: boolean
+      minItems: 6
+      maxItems: 6
+      example: [true, true, true, true, true, true]
+    DemoConfig:
+      type: object
+      properties:
+        openbox:
+          type: boolean
+          default: false
+          example: false
+          description: whether to open the box as part of the demo routine
+        closebox:
+          type: boolean
+          default: false
+          example: false
+          description: whether to close the box as part of the demo routine
+        powerondrone:
+          type: boolean
+          default: false
+          example: false
+          description: whether to power the drone on as part of the demo routine
+        poweroffdrone:
+          type: boolean
+          default: false
+          example: false
+          description: whether to power the drone off as part of the demo routine
+        swapbattery:
+          type: boolean
+          default: true
+          example: true
+          description: whether to swap the battery as part of the demo routine
     PasswordPayload:
       type: object
       required:
