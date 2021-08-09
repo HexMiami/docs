@@ -20,6 +20,34 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Station"
+  /stations/swap_counts:
+    get:
+      description: "Gets swap counts"
+      operationId: getSwapCounts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SwapCount"
+  /stations/total_swaps:
+    get:
+      description: "Gets total swaps across all Hextronics stations"
+      operationId: getTotalSwaps
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
   /station/{id}:
     get:
       description: "Gets a specific station"
@@ -230,13 +258,28 @@ components:
           example: false
         lastTelemetry:
           type: object
-        lastCheck:
+        lastOnlineCheck:
+          type: number
+        lastTelemetryCheck:
           type: number
     StationInteractPayload:
       type: object
       properties:
         content:
           type: object
+    SwapCount:
+      type: object
+      required:
+        - stationName
+        - owner
+        - lastSwapCount
+      properties:
+        stationName:
+          type: string
+        owner:
+          type: string
+        lastSwapCount:
+          type: number
     Station:
       type: object
       required:
@@ -260,6 +303,8 @@ components:
         lastOnlineStatus:
           type: boolean
           example: false
+        lastOnlineCheck:
+          type: number
         lastTelemetry:
           type: object
           properties:
@@ -267,7 +312,7 @@ components:
               $ref: "#/components/schemas/TelemetryResponse"
             status:
               type: number
-        lastCheck:
+        lastTelemetryCheck:
           type: number
     ID:
       type: string
