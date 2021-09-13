@@ -330,6 +330,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatterySlotsMask"
+  /advanced/batteries/enabled_placement_slots:
+    get:
+      summary: "returns an array of booleans where a[i] is True if the ith battery slot is full (occupied by a battery)"
+      operationId: api.api.getPlacementBatteries
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for battery occupation status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatteryPlacementMask"
+    post:
+      summary: "update which battery slots are occupied"
+      operationId: api.api.postPlacementBatteries
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatteryPlacementMask"
+      responses:
+        "200":
+          description: "returns array of booleans for battery occupation status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatteryPlacementMask"
   /demo:
     get:
       summary: "returns whether the unit is in demo mode"
@@ -806,6 +843,13 @@ components:
         BattZdown:
           type: integer
     BatterySlotsMask:
+      type: array
+      items:
+        type: boolean
+      minItems: 6
+      maxItems: 6
+      example: [true, true, true, true, true, true]
+    BatteryPlacementMask:
       type: array
       items:
         type: boolean
