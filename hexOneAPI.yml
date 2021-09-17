@@ -530,6 +530,7 @@ components:
           lightson,
           lightsoff,
           calibrate,
+          abort,
         ]
     ActionRequest:
       type: object
