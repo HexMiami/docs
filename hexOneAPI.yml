@@ -224,6 +224,7 @@ paths:
           schema:
             type: string
             enum:
+              - autoac
               - heater
               - cooler
               - remotecontrol
@@ -590,6 +591,7 @@ components:
             - pad
             - internal_temperature
             - swaps_performed
+            - auto_climate_state
             - location
           properties:
             operation:
@@ -602,6 +604,9 @@ components:
             pad:
               type: string
               enum: [empty, occupied]
+            auto_climate_state:
+              type: string
+              enum: [auto, manual]
             internal_temperature:
               type: number
             swaps_performed:
