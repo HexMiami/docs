@@ -574,6 +574,8 @@ components:
       type: object
       required:
         - status
+        - battery_slot_status_123
+        - battery_slot_status_456
         - battery_info
         - toggles
         - lights
@@ -616,6 +618,14 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+        battery_slot_status_123:
+          type: array
+          items: 
+            $ref: "#/components/schemas/BatterySlotStatus123"
+        battery_slot_status_456:
+          type: array
+          items: 
+            $ref: "#/components/schemas/BatterySlotStatus456"
         battery_info:
           type: object
           required:
@@ -701,6 +711,38 @@ components:
               time:
                 type: number
                 format: float64
+    BatterySlotStatus123:
+      type: object
+      required:
+        - name
+        - slot_1
+        - slot_2
+        - slot_3
+      properties:
+        name:
+          type: string
+        slot_1:
+          type: number
+        slot_2:
+          type: number
+        slot_3:
+          type: number
+    BatterySlotStatus456:
+      type: object
+      required:
+        - name
+        - slot_4
+        - slot_5
+        - slot_6
+      properties:
+        name:
+          type: string
+        slot_4:
+          type: number
+        slot_5:
+          type: number
+        slot_6:
+          type: number
     TemperatureHistory:
       type: object
       required:
