@@ -329,6 +329,7 @@ components:
             - internal_temperature
             - swaps_performed
             - location
+            # - version
           properties:
             operation:
               type: boolean
@@ -349,6 +350,8 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+            # version:
+            #     type: string
         battery_info:
           type: object
           required:
