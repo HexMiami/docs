@@ -5,6 +5,20 @@ info:
 servers:
   - url: "http://localhost:8080/"
 paths:
+  /check_admin_status:
+    get:
+      description: "Check if user is an admin"
+      operationId: getAdminStatus
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+
   /stations:
     get:
       description: "Gets all a users stations"
@@ -20,6 +34,21 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Station"
+  /stations_production_history:
+    get:
+      description: "Gets all a users stations production history"
+      operationId: getStationsProductionHistory
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StationProdHistory"
   /stations/swap_counts:
     get:
       description: "Gets swap counts"
@@ -235,6 +264,10 @@ components:
         description:
           type: string
           example: "South of Barn"
+        productionHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductionStatus"
         password:
           type: string
           example: "password"
@@ -247,6 +280,8 @@ components:
         description:
           type: string
           example: "South of Barn"
+        productionStatus:
+          $ref: "#/components/schemas/ProductionStatus"
         password:
           type: string
           example: "password"
@@ -300,6 +335,8 @@ components:
         description:
           type: string
           example: "South of Barn"
+        prodStatus:
+          type: string
         lastOnlineStatus:
           type: boolean
           example: false
@@ -314,8 +351,34 @@ components:
               type: number
         lastTelemetryCheck:
           type: number
+    StationProdHistory:
+      type: object
+      required:
+        - _id
+        - stationId
+        - productionHistory
+      properties:
+        _id:
+          $ref: "#/components/schemas/ID"
+        stationId:
+          type: string
+        productionHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductionStatus"
     ID:
       type: string
+    ProductionStatus:
+      type: object
+      required:
+        - stage
+      properties:
+        stage:
+          type: string
+        agent:
+          type: string
+        date:
+          type: string
     TelemetryResponse:
       type: object
       properties:
