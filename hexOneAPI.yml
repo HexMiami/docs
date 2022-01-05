@@ -405,6 +405,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatteryMemory"
+  /advanced/request_update:
+    post:
+      summary: "Request box update"
+      operationId: api.api.request_update
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /demo:
     get:
       summary: "returns whether the unit is in demo mode"
@@ -657,11 +672,11 @@ components:
               description: Coordinates [lat, lon]
         battery_slot_status_123:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/BatterySlotStatus123"
         battery_slot_status_456:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/BatterySlotStatus456"
         battery_info:
           type: object
