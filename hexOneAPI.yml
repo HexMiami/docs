@@ -647,6 +647,7 @@ components:
             - swaps_performed
             - auto_climate_state
             - location
+            - version
           properties:
             operation:
               type: boolean
@@ -670,6 +671,8 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+            version:
+              type: string
         battery_slot_status_123:
           type: array
           items:
