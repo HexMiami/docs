@@ -644,6 +644,7 @@ components:
             - door
             - pad
             - internal_temperature
+            - internal_temperature_celcius
             - swaps_performed
             - auto_climate_state
             - location
@@ -659,6 +660,12 @@ components:
             pad:
               type: string
               enum: [empty, occupied]
+            internal_temperature:
+              type: number
+            internal_temperature_celcius:
+              type: number
+            swaps_performed:
+              type: integer
             auto_climate_state:
               type: string
               enum: [auto, manual]
