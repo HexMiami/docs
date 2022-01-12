@@ -644,8 +644,11 @@ components:
             - door
             - pad
             - internal_temperature
+            - internal_temperature_celcius
             - swaps_performed
             - auto_climate_state
+            - lower_temp_threshold
+            - upper_temp_threshold
             - location
             - version
           properties:
@@ -661,15 +664,17 @@ components:
               enum: [empty, occupied]
             internal_temperature:
               type: number
+            internal_temperature_celcius:
+              type: number
             swaps_performed:
               type: integer
             auto_climate_state:
               type: string
               enum: [auto, manual]
-            internal_temperature:
+            lower_temp_threshold:
               type: number
-            swaps_performed:
-              type: integer
+            upper_temp_threshold:
+              type: number
             location:
               type: array
               items:
