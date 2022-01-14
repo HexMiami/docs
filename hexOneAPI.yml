@@ -584,6 +584,8 @@ components:
           lightsoff,
           calibrate,
           abort,
+          updategps,
+          updatenetwork,
         ]
     ActionRequest:
       type: object
@@ -650,6 +652,8 @@ components:
             - lower_temp_threshold
             - upper_temp_threshold
             - location
+            - network
+            - gps_location
             - version
           properties:
             operation:
@@ -676,6 +680,13 @@ components:
             upper_temp_threshold:
               type: number
             location:
+              type: array
+              items:
+                type: number
+              description: Coordinates [lat, lon]
+            network:
+              type: string
+            gps_location:
               type: array
               items:
                 type: number
