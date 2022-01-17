@@ -420,6 +420,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/update_weather_api_key:
+    post:
+      summary: "Change weather api key in box"
+      operationId: api.api.store_weather_apikey
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeatherApiKeyPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /demo:
     get:
       summary: "returns whether the unit is in demo mode"
@@ -1040,6 +1061,13 @@ components:
         current_password:
           type: string
         new_password:
+          type: string
+    WeatherApiKeyPayload:
+      type: object
+      required:
+        - apikey
+      properties:
+        apikey:
           type: string
     ApiError:
       type: object
