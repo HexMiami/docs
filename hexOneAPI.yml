@@ -676,6 +676,11 @@ components:
             - network
             - gps_location
             - version
+            - weather_temp
+            - weather_wind
+            - weather_humidity
+            - weather_pressure
+            - weather_precipitation
           properties:
             operation:
               type: boolean
@@ -714,6 +719,16 @@ components:
               description: Coordinates [lat, lon]
             version:
               type: string
+            weather_temp:
+              type: number
+            weather_wind:
+              type: number
+            weather_humidity:
+              type: number
+            weather_pressure:
+              type: number
+            weather_precipitation:
+              type: number
         battery_slot_status_123:
           type: array
           items:
