@@ -413,8 +413,23 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+            network:
+              type: string
+              description: Network Speed Test
+            gps_location:
+              type: string
             version:
               type: string
+            weather_temp:
+              type: number
+            weather_wind:
+              type: number
+            weather_humidity:
+              type: number
+            weather_pressure:
+              type: number
+            weather_precipitation:
+              type: number
         battery_info:
           type: object
           required:
