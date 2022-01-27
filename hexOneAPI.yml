@@ -713,10 +713,7 @@ components:
             network:
               type: string
             gps_location:
-              type: array
-              items:
-                type: number
-              description: Coordinates [lat, lon]
+              type: string
             version:
               type: string
             weather_temp:
