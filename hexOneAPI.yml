@@ -672,6 +672,7 @@ components:
             - auto_climate_state
             - lower_temp_threshold
             - upper_temp_threshold
+            - pwm_compressor
             - location
             - network
             - gps_location
@@ -705,6 +706,8 @@ components:
               type: number
             upper_temp_threshold:
               type: number
+            pwm_compressor:
+              type: string
             location:
               type: array
               items:
@@ -932,6 +935,7 @@ components:
         - ButtonZ
         - ButtonZdown
         - ButtonZup
+        - ButtonZlower
         - ZZTop
         - DroneX
         - DroneY
@@ -959,6 +963,8 @@ components:
         ButtonZdown:
           type: integer
         ButtonZup:
+          type: integer
+        ButtonZlower:
           type: integer
         ZZTop:
           type: integer
