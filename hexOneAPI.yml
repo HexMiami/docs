@@ -441,6 +441,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/update_compressor_pwm:
+    post:
+      summary: "Change compressor pwm"
+      operationId: api.api.change_compressor_pwm
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompressorPWMPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /demo:
     get:
       summary: "returns whether the unit is in demo mode"
@@ -1086,6 +1107,13 @@ components:
         - apikey
       properties:
         apikey:
+          type: string
+    CompressorPWMPayload:
+      type: object
+      required:
+        - pwm
+      properties:
+        pwm:
           type: string
     ApiError:
       type: object
