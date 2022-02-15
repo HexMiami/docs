@@ -413,6 +413,8 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+            location_data:
+              type: object
             network:
               type: string
               description: Network Speed Test
