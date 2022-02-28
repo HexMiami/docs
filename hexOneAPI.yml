@@ -625,9 +625,16 @@ components:
           lightson,
           lightsoff,
           calibrate,
-          abort,
           updategps,
           updatenetwork,
+          opengripper,
+          closegripper,
+          zeroall,
+          disablexyz,
+          movex,
+          movez,
+          movetest,
+          abort,
         ]
     ActionRequest:
       type: object
@@ -736,6 +743,8 @@ components:
               description: Coordinates [lat, lon]
             network:
               type: string
+            location_data:
+              type: object
             gps_location:
               type: string
             version:
