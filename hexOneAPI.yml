@@ -420,6 +420,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/battery_current_offsets:
+    post:
+      summary: "Adjust battery current offsets"
+      operationId: api.api.battery_current_offsets
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /advanced/battery_current_offsets_reset:
+    post:
+      summary: "Reset battery current offsets"
+      operationId: api.api.battery_current_offsets_reset
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/update_weather_api_key:
     post:
       summary: "Change weather api key in box"
