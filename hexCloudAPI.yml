@@ -414,9 +414,7 @@ components:
                 type: number
               description: Coordinates [lat, lon]
             location_data:
-              anyOf:
-                - type: string
-                - type: object
+              type: object
             network:
               type: string
               description: Network Speed Test
