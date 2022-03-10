@@ -209,6 +209,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TemperatureHistory"
+  /telemetry/board_voltage_history:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get last 6 hours of temperature history"
+      operationId: api.api.getBoardVoltageHistory
+      tags:
+        - status
+        - board_voltage
+      responses:
+        "200":
+          description: "board voltage history"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BoardVoltageHistory"
   /toggle/{thing}/{toggle}:
     put:
       security:
@@ -726,6 +745,7 @@ components:
             - pad
             - internal_temperature
             - internal_temperature_celcius
+            - board_voltage
             - swaps_performed
             - auto_climate_state
             - lower_temp_threshold
@@ -754,6 +774,8 @@ components:
             internal_temperature:
               type: number
             internal_temperature_celcius:
+              type: number
+            board_voltage:
               type: number
             swaps_performed:
               type: integer
@@ -927,6 +949,20 @@ components:
         temperature:
           type: number
           description: temperature in F
+          example: 69
+    BoardVoltageHistory:
+      type: object
+      required:
+        - time
+        - board_voltage
+      properties:
+        time:
+          type: number
+          description: seconds since Epoch
+          example: 1000000000000.11
+        board_voltage:
+          type: number
+          description: voltage in V
           example: 69
     LightStatus:
       type: object
