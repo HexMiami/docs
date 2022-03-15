@@ -5,10 +5,10 @@ info:
 servers:
   - url: "http://localhost:8080/"
 paths:
-  /check_admin_status:
+  /get_user_info:
     get:
-      description: "Check if user is an admin"
-      operationId: getAdminStatus
+      description: "Get the user info (id, name, level)"
+      operationId: getUserInfo
       security:
         - bearerAuth: []
       responses:
@@ -17,7 +17,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                type: object
 
   /stations:
     get:
