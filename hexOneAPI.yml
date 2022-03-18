@@ -754,6 +754,7 @@ components:
             - location
             - network
             - gps_location
+            - voltage_indicator
             - version
             - weather_temp
             - weather_wind
@@ -794,6 +795,8 @@ components:
                 type: number
               description: Coordinates [lat, lon]
             network:
+              type: string
+            voltage_indicator:
               type: string
             location_data:
               type: object
