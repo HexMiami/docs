@@ -816,6 +816,8 @@ components:
               type: string
             location_data:
               type: object
+            station_uptime:
+              type: number
             gps_location:
               type: string
             version:
