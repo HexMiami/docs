@@ -415,6 +415,8 @@ components:
               description: Coordinates [lat, lon]
             location_data:
               type: object
+            station_uptime:
+              type: number
             network:
               type: string
               description: Network Speed Test
