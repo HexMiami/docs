@@ -141,6 +141,223 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Station"
+  /checkStationBattHistory/{id}:
+    get:
+      description: "Check if specific station battery history exists"
+      operationId: checkStationBatteryData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /latestStationBattHistory/{id}:
+    get:
+      description: "Get latest specific station battery history"
+      operationId: getLatestStationBatteryData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+                # items:
+                #   type: object
+                # $ref: "#/components/schemas/StationBatteryHistory"
+
+  /stationBattHistory/{id}:
+    post:
+      description: "Create a new station battery data history"
+      operationId: postStationBatteryData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      description: "Get a specific station battery history"
+      operationId: getStationBatteryData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    put:
+      description: "Update a specific station battery history"
+      operationId: putStationBatteryData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /checkStationActHistory/{id}:
+    get:
+      description: "Check if specific station activity history exists"
+      operationId: checkStationActivityData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+  /latestStationActHistory/{id}:
+    get:
+      description: "Get latest specific station activity history"
+      operationId: getLatestStationActivityData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /stationActHistory/{id}:
+    post:
+      description: "Create a new station activity data history"
+      operationId: postStationActivityData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+    get:
+      description: "Get a specific station activity history"
+      operationId: getStationActivityData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    put:
+      description: "Update a specific station activity history"
+      operationId: putStationActivityData
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
   /station:
     post:
       description: "Create a new station"
@@ -159,7 +376,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Station"
+                type: object
   /station/{id}/{rest}:
     get:
       description: "Authenticate to box and return data"
@@ -351,6 +568,19 @@ components:
               type: number
         lastTelemetryCheck:
           type: number
+    # StationBatteryHistory:
+    #   type: object
+    #   # required:
+    #   #   - stationName
+    #   #   - owner
+    #   #   - lastSwapCount
+    #   properties:
+    #     lastTimeUpdated:
+    #       type: number
+    #     stationId:
+    #       type: string
+    #     batteryHistory:
+    #       type: array
     StationProdHistory:
       type: object
       required:
