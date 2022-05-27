@@ -783,6 +783,7 @@ components:
             - version
             - weather_temp
             - weather_wind
+            - weather_wind_degree
             - weather_humidity
             - weather_pressure
             - weather_precipitation
@@ -846,6 +847,8 @@ components:
             weather_temp:
               type: number
             weather_wind:
+              type: number
+            weather_wind_degree:
               type: number
             weather_humidity:
               type: number
