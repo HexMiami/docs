@@ -354,6 +354,167 @@ paths:
             application/json:
               schema:
                 type: object
+  /checkStationErrorHistory/{id}/{jobId}:
+    get:
+      description: "Check a specific station error history"
+      operationId: checkStationErrorLog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: jobId
+          description: "jobId of error"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+  /getLatestUnresolvedErrorLog/{id}:
+    get:
+      description: "Get a specific station latest unresolved error log"
+      operationId: getLatestUnresolvedErrorLog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /getStationFullErrorLogs/{id}:
+    get:
+      description: "Get all error logs for a specific station"
+      operationId: getStationFullErrorLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /stationErrorHistory/{id}:
+    post:
+      description: "Create a new station error data history"
+      operationId: postStationErrorLog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+    put:
+      description: "Update the error logs for the station"
+      operationId: putStationErrorLog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: string
+    # get:
+    #   description: "Get a specific station error history"
+    #   operationId: getStationErrorLog
+    #   security:
+    #     - bearerAuth: []
+    #   parameters:
+    #     - in: path
+    #       name: id
+    #       description: "Id of the station"
+    #       required: true
+    #       schema:
+    #         type: string
+    #   responses:
+    #     "200":
+    #       description: "TODO"
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    # put:
+    #   description: "Update a specific station activity history"
+    #   operationId: putStationActivityData
+    #   security:
+    #     - bearerAuth: []
+    #   parameters:
+    #     - in: path
+    #       name: id
+    #       description: "Id of the station"
+    #       required: true
+    #       schema:
+    #         type: string
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           type: object
+    #   responses:
+    #     "200":
+    #       description: "TODO"
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
   /station:
     post:
       description: "Create a new station"
