@@ -793,6 +793,10 @@ components:
               enum: [empty, occupied]
             internal_temperature:
               type: number
+            cooler_state:
+              type: string
+            heater_state:
+              type: string
             swaps_performed:
               type: integer
             location:
