@@ -313,6 +313,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsets"
+  /advanced/offsets_atlas:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current set of sku offsets for Atlas"
+      operationId: api.api.getSkuOffsetsAtlas
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The current sku offsets of Atlas"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsAtlas"
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update sku offsets for Atlas"
+      operationId: api.api.putSkuOffsetsAtlas
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        description: "The current sku offsets of Atlas"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkuOffsetsAtlas"
+      responses:
+        "200":
+          description: "The current sku offsets Atlas"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsAtlas"
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
@@ -387,6 +425,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatteryPlacementMask"
+  /advanced/batteries/enabled_placement_slots_atlas:
+    get:
+      summary: "returns an array of booleans where a[i] is True if the ith battery slot is full (occupied by a battery)"
+      operationId: api.api.getPlacementBatteriesAtlas
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for battery occupation status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatteryPlacementMaskAtlas"
+    post:
+      summary: "update which battery slots are occupied"
+      operationId: api.api.postPlacementBatteriesAtlas
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatteryPlacementMaskAtlas"
+      responses:
+        "200":
+          description: "returns array of booleans for battery occupation status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatteryPlacementMaskAtlas"
   /advanced/battery_memory:
     get:
       summary: "returns an array with one boolean where if true, remember the battery positions at boot (don't overwrite) and set has_discovered to true "
@@ -705,6 +780,17 @@ components:
           movez,
           movetest,
           abort,
+          raisepad,
+          lowerpad,
+          openlat,
+          closelat,
+          openlong,
+          closelong,
+          zeroy,
+          zeroz,
+          zeropad,
+          zerolatch,
+          horizontallatch,
         ]
     ActionRequest:
       type: object
@@ -754,12 +840,14 @@ components:
         - lights
         - climate
         - motors
+        # - motors_atlas # Shouldn't be required
         - error_message
         - time
       properties:
         status:
           type: object
           required:
+            - station_type
             - operation
             - system
             - door
@@ -788,6 +876,8 @@ components:
             - weather_pressure
             - weather_precipitation
           properties:
+            station_type:
+              type: string
             operation:
               type: boolean
             system:
@@ -896,6 +986,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorStatus"
+        motors_atlas:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorStatusAtlas"
         error_message:
           type: string
           example: "Drone is in the bathroom"
@@ -1068,6 +1162,75 @@ components:
           type: number
         power:
           type: number
+    MotorStatusAtlas:
+      type: object
+      required:
+        - name
+        - current_position
+        - zero_fail
+        - time_of_last_op
+        - hit_switch
+        - last_switch
+        - zero_error
+        - zero_time
+        - stalled
+        - base_stall_threshold
+        - last_stall_threshold
+        - last_travel_dist
+        - home_on_switch
+        - idle_lock
+        - speed
+        - accel
+        - microsteps
+        - rms
+        - zero_direction
+        - drive_direction
+        - sg_unlock
+      properties:
+        name:
+          type: string
+        current_position:
+          type: string
+        zero_fail:
+          type: number
+        time_of_last_op:
+          type: number
+        hit_switch:
+          type: number
+        last_switch:
+          type: number
+        zero_error:
+          type: number
+        zero_time:
+          type: number
+        stalled:
+          type: number
+        base_stall_threshold:
+          type: number
+        last_stall_threshold:
+          type: number
+        last_travel_dist:
+          type: number
+        home_on_switch:
+          type: number
+        idle_lock:
+          type: number
+        speed:
+          type: number
+        zero_speed:
+          type: number
+        accel:
+          type: number
+        microsteps:
+          type: number
+        rms:
+          type: number
+        zero_direction:
+          type: number
+        drive_direction:
+          type: number
+        sg_unlock:
+          type: number
     SkuOffsets:
       type: object
       required:
@@ -1145,6 +1308,175 @@ components:
           type: integer
         BattZdown:
           type: integer
+    SkuOffsetsAtlas:
+      type: object
+      required:
+        - RoofDist
+        - RoofDutyCycle
+        - PadOffset
+        - PadMicrosteps
+        - PadSpeedAmount
+        - PadSwapPosAmount
+        - PadFull
+        - PadExtra
+        - PadTimeout
+        - YMicrosteps
+        - YExtensionAmount
+        - YSpeedAmount
+        - YSlowAmount
+        - YStall
+        - ShimOut
+        - ShimIn
+        - CarefulDistAmount
+        - PowerExtend
+        - PowerRetract
+        - FullClose
+        - FullOpen
+        - DroneDistAmount
+        - BodyDistAmount
+        - ZMicrosteps
+        - ZOffsetConstant
+        - ZSpeedAmount
+        - ZTimeout
+        - GantryZeroAmount
+        - LatchMicrosteps
+        - LatchSpeedAmount
+        - LatchStall
+        - LatchSGUnlock
+        - CenterMicrosteps
+        - CenterSpeedAmount
+        - CenterAccelAmount
+        - LatDistAmount
+        - LongDistAmount
+        - LatStall
+        - LongStall
+        - CenterRMS
+        - LatStallCycle
+        - LongStallCycle
+        - LatStallMax
+        - LongStallMax
+        - SlotInsert
+        - SlotDeposit
+        - ExtraSlotPush
+        - BattRow1
+        - BattRow2
+        - BattRow3
+        - BattRow4
+        - DronePower1
+        - DronePower2
+        - DronePower3
+        - DronePower4
+      properties:
+        RoofDist:
+          type: integer
+        RoofDutyCycle:
+          type: integer
+        PadOffset:
+          type: integer
+        PadMicrosteps:
+          type: integer
+        PadSpeedAmount:
+          type: integer
+        PadSwapPosAmount:
+          type: integer
+        PadFull:
+          type: integer
+        PadExtra:
+          type: integer
+        PadTimeout:
+          type: integer
+        YMicrosteps:
+          type: integer
+        YExtensionAmount:
+          type: integer
+        YSpeedAmount:
+          type: integer
+        YSlowAmount:
+          type: integer
+        YStall:
+          type: integer
+        ShimOut:
+          type: integer
+        ShimIn:
+          type: integer
+        CarefulDistAmount:
+          type: integer
+        PowerExtend:
+          type: integer
+        PowerRetract:
+          type: integer
+        FullClose:
+          type: integer
+        FullOpen:
+          type: integer
+        DroneDistAmount:
+          type: integer
+        BodyDistAmount:
+          type: integer
+        ZMicrosteps:
+          type: integer
+        ZOffsetConstant:
+          type: integer
+        ZSpeedAmount:
+          type: integer
+        ZTimeout:
+          type: integer
+        GantryZeroAmount:
+          type: integer
+        LatchMicrosteps:
+          type: integer
+        LatchSpeedAmount:
+          type: integer
+        LatchStall:
+          type: integer
+        LatchSGUnlock:
+          type: integer
+        CenterMicrosteps:
+          type: integer
+        CenterSpeedAmount:
+          type: integer
+        CenterAccelAmount:
+          type: integer
+        LatDistAmount:
+          type: integer
+        LongDistAmount:
+          type: integer
+        LatStall:
+          type: integer
+        LongStall:
+          type: integer
+        CenterRMS:
+          type: integer
+        LatStallCycle:
+          type: integer
+        LongStallCycle:
+          type: integer
+        LatStallMax:
+          type: integer
+        LongStallMax:
+          type: integer
+        SlotInsert:
+          type: integer
+        SlotDeposit:
+          type: integer
+        ExtraSlotPush:
+          type: integer
+        BattRow1:
+          type: integer
+        BattRow2:
+          type: integer
+        BattRow3:
+          type: integer
+        BattRow4:
+          type: integer
+        DronePower1:
+          type: integer
+        DronePower2:
+          type: integer
+        DronePower3:
+          type: integer
+        DronePower4:
+          type: integer
     BatterySlotsMask:
       type: array
       items:
@@ -1159,6 +1491,13 @@ components:
       minItems: 6
       maxItems: 6
       example: [true, true, true, true, true, true]
+    BatteryPlacementMaskAtlas:
+      type: array
+      items:
+        type: boolean
+      minItems: 8
+      maxItems: 8
+      example: [true, true, true, true, true, true, true, true]
     BatteryMemory:
       type: array
       items:
