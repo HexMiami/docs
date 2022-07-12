@@ -781,6 +781,8 @@ components:
             - location
             # - version
           properties:
+            station_type:
+              type: string
             operation:
               type: boolean
             system:
