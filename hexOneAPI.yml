@@ -990,6 +990,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorStatusAtlas"
+        motors_dc_atlas:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorDcStatusAtlas"
         error_message:
           type: string
           example: "Drone is in the bathroom"
@@ -1192,11 +1196,11 @@ components:
         current_position:
           type: string
         zero_fail:
-          type: number
+          type: boolean
         time_of_last_op:
           type: number
         hit_switch:
-          type: number
+          type: boolean
         last_switch:
           type: number
         zero_error:
@@ -1204,7 +1208,7 @@ components:
         zero_time:
           type: number
         stalled:
-          type: number
+          type: boolean
         base_stall_threshold:
           type: number
         last_stall_threshold:
@@ -1212,9 +1216,9 @@ components:
         last_travel_dist:
           type: number
         home_on_switch:
-          type: number
+          type: boolean
         idle_lock:
-          type: number
+          type: boolean
         speed:
           type: number
         zero_speed:
@@ -1230,7 +1234,23 @@ components:
         drive_direction:
           type: number
         sg_unlock:
+          type: boolean
+    MotorDcStatusAtlas:
+      type: object
+      required:
+        - name
+        - active
+        - button
+        - is_home
+      properties:
+        name:
+          type: string
+        active:
+          type: boolean
+        button:
           type: number
+        is_home:
+          type: boolean
     SkuOffsets:
       type: object
       required:
