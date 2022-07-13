@@ -791,6 +791,14 @@ components:
           zeropad,
           zerolatch,
           horizontallatch,
+          verticallatch,
+          moveroof,
+          movepad,
+          movegantry,
+          swappart1,
+          swappart2,
+          extracommand1,
+          extracommand2,
         ]
     ActionRequest:
       type: object
@@ -1375,6 +1383,8 @@ components:
         - LongStallCycle
         - LatStallMax
         - LongStallMax
+        - LatSGUnlock
+        - LongSGUnlock
         - SlotInsert
         - SlotDeposit
         - ExtraSlotPush
@@ -1386,6 +1396,10 @@ components:
         - DronePower2
         - DronePower3
         - DronePower4
+        - RoofMovement
+        - PadMovement
+        - GantryMovement
+        - SwapPosition1
       properties:
         RoofDist:
           type: integer
@@ -1475,6 +1489,10 @@ components:
           type: integer
         LongStallMax:
           type: integer
+        LatSGUnlock:
+          type: integer
+        LongSGUnlock:
+          type: integer
         SlotInsert:
           type: integer
         SlotDeposit:
@@ -1496,6 +1514,14 @@ components:
         DronePower3:
           type: integer
         DronePower4:
+          type: integer
+        RoofMovement:
+          type: integer
+        PadMovement:
+          type: integer
+        GantryMovement:
+          type: integer
+        SwapPosition1:
           type: integer
     BatterySlotsMask:
       type: array
