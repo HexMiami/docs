@@ -779,7 +779,6 @@ components:
           movex,
           movez,
           movetest,
-          abort,
           raisepad,
           lowerpad,
           openlat,
@@ -792,13 +791,19 @@ components:
           zerolatch,
           horizontallatch,
           verticallatch,
+          locklatch,
+          unlocklatch,
           moveroof,
           movepad,
           movegantry,
+          movey,
           swappart1,
           swappart2,
+          shimmyin,
+          shimmyout,
           extracommand1,
           extracommand2,
+          abort,
         ]
     ActionRequest:
       type: object
@@ -1387,7 +1392,8 @@ components:
         - LongSGUnlock
         - SlotInsert
         - SlotDeposit
-        - ExtraSlotPush
+        - SlotRetrieve
+        - SlotYBattBump
         - BattRow1
         - BattRow2
         - BattRow3
@@ -1399,7 +1405,13 @@ components:
         - RoofMovement
         - PadMovement
         - GantryMovement
+        - YMovement
         - SwapPosition1
+        - MoveZOut
+        - MoveZReady
+        - MoveZFinal
+        - FinalYBattPush
+        - FinalYBattLock
       properties:
         RoofDist:
           type: integer
@@ -1497,7 +1509,9 @@ components:
           type: integer
         SlotDeposit:
           type: integer
-        ExtraSlotPush:
+        SlotRetrieve:
+          type: integer
+        SlotYBattBump:
           type: integer
         BattRow1:
           type: integer
@@ -1521,7 +1535,19 @@ components:
           type: integer
         GantryMovement:
           type: integer
+        YMovement:
+          type: integer
         SwapPosition1:
+          type: integer
+        MoveZOut:
+          type: integer
+        MoveZReady:
+          type: integer
+        MoveZFinal:
+          type: integer
+        FinalYBattPush:
+          type: integer
+        FinalYBattLock:
           type: integer
     BatterySlotsMask:
       type: array
