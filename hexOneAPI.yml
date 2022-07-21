@@ -351,6 +351,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsetsAtlas"
+  /advanced/positions_atlas:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current set of sku positions for Atlas"
+      operationId: api.api.getSkuPositionsAtlas
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The current sku positions of Atlas"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsAtlas"
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
@@ -1348,34 +1364,58 @@ components:
         - RoofDutyCycle
         - PadOffset
         - PadMicrosteps
+        - PadRMS
         - PadSpeedAmount
         - PadSwapPosAmount
         - PadFull
         - PadExtra
         - PadTimeout
         - YMicrosteps
+        - ExtensionMicrosteps
+        - YRMS
+        - ExtensionRMS
         - YExtensionAmount
         - YSpeedAmount
         - YSlowAmount
+        - YStallCycle
+        - YStallMax
         - YStall
+        - YSGUnlock
+        - YStallDelay
         - ShimOut
         - ShimIn
-        - CarefulDistAmount
+        - CarefulInDistAmount
+        - CarefulOutDistAmount
+        - CarefulDroneDistAmount
         - PowerExtend
         - PowerRetract
+        - PowerStallCycle
+        - PowerStallMax
+        - PowerStall
+        - PowerSGUnlock
+        - PowerStallDelay
         - FullClose
         - FullOpen
         - DroneDistAmount
         - BodyDistAmount
         - ZMicrosteps
+        - ZRMS
         - ZOffsetConstant
         - ZSpeedAmount
         - ZTimeout
         - GantryZeroAmount
         - LatchMicrosteps
+        - LatchRMS
         - LatchSpeedAmount
+        - LatchStallCycle
+        - LatchStallMax
         - LatchStall
         - LatchSGUnlock
+        - LatchStallDelay
+        - LatchBattUnlockDeg
+        - LatchBattLockDeg
+        - LatchVerticalDeg
+        - LatchHorizontalDeg
         - CenterMicrosteps
         - CenterSpeedAmount
         - CenterAccelAmount
@@ -1390,6 +1430,8 @@ components:
         - LongStallMax
         - LatSGUnlock
         - LongSGUnlock
+        - LatStallDelay
+        - LongStallDelay
         - SlotInsert
         - SlotDeposit
         - SlotRetrieve
@@ -1421,6 +1463,8 @@ components:
           type: integer
         PadMicrosteps:
           type: integer
+        PadRMS:
+          type: integer
         PadSpeedAmount:
           type: integer
         PadSwapPosAmount:
@@ -1433,23 +1477,51 @@ components:
           type: integer
         YMicrosteps:
           type: integer
+        ExtensionMicrosteps:
+          type: integer
+        YRMS:
+          type: integer
+        ExtensionRMS:
+          type: integer
         YExtensionAmount:
           type: integer
         YSpeedAmount:
           type: integer
         YSlowAmount:
           type: integer
+        YStallCycle:
+          type: integer
+        YStallMax:
+          type: integer
         YStall:
+          type: integer
+        YSGUnlock:
+          type: integer
+        YStallDelay:
           type: integer
         ShimOut:
           type: integer
         ShimIn:
           type: integer
-        CarefulDistAmount:
+        CarefulInDistAmount:
+          type: integer
+        CarefulOutDistAmount:
+          type: integer
+        CarefulDroneDistAmount:
           type: integer
         PowerExtend:
           type: integer
         PowerRetract:
+          type: integer
+        PowerStallCycle:
+          type: integer
+        PowerStallMax:
+          type: integer 
+        PowerStall:
+          type: integer
+        PowerSGUnlock:
+          type: integer
+        PowerStallDelay:
           type: integer
         FullClose:
           type: integer
@@ -1461,6 +1533,8 @@ components:
           type: integer
         ZMicrosteps:
           type: integer
+        ZRMS:
+          type: integer
         ZOffsetConstant:
           type: integer
         ZSpeedAmount:
@@ -1471,11 +1545,27 @@ components:
           type: integer
         LatchMicrosteps:
           type: integer
+        LatchRMS:
+          type: integer
         LatchSpeedAmount:
+          type: integer
+        LatchStallCycle:
+          type: integer
+        LatchStallMax:
           type: integer
         LatchStall:
           type: integer
         LatchSGUnlock:
+          type: integer
+        LatchStallDelay:
+          type: integer
+        LatchBattUnlockDeg:
+          type: integer
+        LatchBattLockDeg:
+          type: integer
+        LatchVerticalDeg:
+          type: integer
+        LatchHorizontalDeg:
           type: integer
         CenterMicrosteps:
           type: integer
@@ -1504,6 +1594,10 @@ components:
         LatSGUnlock:
           type: integer
         LongSGUnlock:
+          type: integer
+        LatStallDelay:
+          type: integer
+        LongStallDelay:
           type: integer
         SlotInsert:
           type: integer
