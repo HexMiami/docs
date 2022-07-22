@@ -819,6 +819,10 @@ components:
           shimmyout,
           extracommand1,
           extracommand2,
+          extracommand3,
+          extracommand4,
+          extracommand5,
+          extracommand6,
           abort,
         ]
     ActionRequest:
@@ -1421,6 +1425,8 @@ components:
         - CenterAccelAmount
         - LatDistAmount
         - LongDistAmount
+        - FrontLongDistAmount
+        - BackLongDistAmount
         - LatStall
         - LongStall
         - CenterRMS
@@ -1516,7 +1522,7 @@ components:
         PowerStallCycle:
           type: integer
         PowerStallMax:
-          type: integer 
+          type: integer
         PowerStall:
           type: integer
         PowerSGUnlock:
@@ -1576,6 +1582,10 @@ components:
         LatDistAmount:
           type: integer
         LongDistAmount:
+          type: integer
+        FrontLongDistAmount:
+          type: integer
+        BackLongDistAmount:
           type: integer
         LatStall:
           type: integer
