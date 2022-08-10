@@ -404,6 +404,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatterySlotsMask"
+  /advanced/batteries/enabled_slots_atlas:
+    get:
+      summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
+      operationId: api.api.getEnabledBatteriesAtlas
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for battery enabled status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatterySlotsMaskAtlas"
+    post:
+      summary: "update which batteries are enabled"
+      operationId: api.api.postEnabledBatteriesAtlas
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatterySlotsMaskAtlas"
+      responses:
+        "200":
+          description: "returns array of booleans for battery enabled status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatterySlotsMask"
   /advanced/batteries/enabled_placement_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery slot is full (occupied by a battery)"
@@ -1660,6 +1697,13 @@ components:
       minItems: 6
       maxItems: 6
       example: [true, true, true, true, true, true]
+    BatterySlotsMaskAtlas:
+      type: array
+      items:
+        type: boolean
+      minItems: 8
+      maxItems: 8
+      example: [true, true, true, true, true, true, true, true]
     BatteryPlacementMask:
       type: array
       items:
