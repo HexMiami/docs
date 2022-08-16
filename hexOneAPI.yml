@@ -797,6 +797,23 @@ paths:
             text/plain:
               schema:
                 type: string
+  /battery_vision_picture:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get Battery Vision Pictures"
+      operationId: api.api.getBatteryVisionPic
+      tags:
+        - logs
+      responses:
+        "200":
+          description: "battery vision picture file"
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
 
 components:
   securitySchemes:
