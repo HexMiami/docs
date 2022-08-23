@@ -639,6 +639,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/update_temperature_thresholds:
+    post:
+      summary: "Change temperature thresholds"
+      operationId: api.api.change_temperature_thresholds
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemperatureThresholdsPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/update_weatherflow_api:
     post:
       summary: "Update weatherflow api token"
@@ -836,6 +857,8 @@ components:
           closebox,
           powerondrone,
           poweroffdrone,
+          powerdronetoggle,
+          remotecontroltoggle,
           swapbattery,
           lightson,
           lightsoff,
@@ -1421,9 +1444,13 @@ components:
         - RoofDist
         - RoofDutyCycle
         - PadOffset
+        - PadOffsetLeft
+        - PadOffsetRight
         - PadMicrosteps
         - PadRMS
         - PadSpeedAmount
+        - PadZeroSpeedAmount
+        - PadAccelAmount
         - PadSwapPosAmount
         - PadFull
         - PadExtra
@@ -1434,6 +1461,7 @@ components:
         - ExtensionRMS
         - YExtensionAmount
         - YSpeedAmount
+        - YZeroSpeedAmount
         - YSlowAmount
         - YStallCycle
         - YStallMax
@@ -1521,11 +1549,19 @@ components:
           type: integer
         PadOffset:
           type: integer
+        PadOffsetLeft:
+          type: integer
+        PadOffsetRight:
+          type: integer
         PadMicrosteps:
           type: integer
         PadRMS:
           type: integer
         PadSpeedAmount:
+          type: integer
+        PadZeroSpeedAmount:
+          type: integer
+        PadAccelAmount:
           type: integer
         PadSwapPosAmount:
           type: integer
@@ -1546,6 +1582,8 @@ components:
         YExtensionAmount:
           type: integer
         YSpeedAmount:
+          type: integer
+        YZeroSpeedAmount:
           type: integer
         YSlowAmount:
           type: integer
@@ -1810,6 +1848,16 @@ components:
         - pwm
       properties:
         pwm:
+          type: string
+    TemperatureThresholdsPayload:
+      type: object
+      required:
+        - lower_temp_threshold
+        - upper_temp_threshold
+      properties:
+        lower_temp_threshold:
+          type: string
+        upper_temp_threshold:
           type: string
     WeatherFlowAPIPayload:
       type: object
