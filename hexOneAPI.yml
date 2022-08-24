@@ -356,13 +356,36 @@ paths:
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Get current set of sku positions for Atlas"
+      summary: "Get default set of sku positions for Atlas"
       operationId: api.api.getSkuPositionsAtlas
       tags:
         - advanced
       responses:
         "200":
-          description: "The current sku positions of Atlas"
+          description: "The default sku positions of Atlas"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsAtlas"
+  /advanced/motors_config_atlas:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update motor configurations for Atlas"
+      operationId: api.api.putMotorsConfigAtlas
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        description: "The current motor configurations of Atlas"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkuOffsetsAtlas"
+      responses:
+        "200":
+          description: "The current motor configurations Atlas"
           content:
             application/json:
               schema:
@@ -1537,6 +1560,7 @@ components:
         - GantryMovement
         - YMovement
         - SwapPosition1
+        - MoveZPower
         - MoveZOut
         - MoveZReady
         - MoveZFinal
@@ -1734,6 +1758,8 @@ components:
         YMovement:
           type: integer
         SwapPosition1:
+          type: integer
+        MoveZPower:
           type: integer
         MoveZOut:
           type: integer
