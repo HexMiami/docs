@@ -313,6 +313,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsets"
+  /advanced/change_offset_config:
+    post:
+      summary: "Change Offset File"
+      operationId: api.api.change_offset_config
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OffsetConfigPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/offsets_atlas:
     get:
       security:
@@ -390,6 +411,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsetsAtlas"
+  /advanced/offsets_uni:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current set of sku offsets"
+      operationId: api.api.getSkuOffsetsUni
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The current sku offsets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsUni"
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update sku offsets"
+      operationId: api.api.putSkuOffsetsUni
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        description: "The current sku offsets"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkuOffsetsUni"
+      responses:
+        "200":
+          description: "The current sku offsets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsUni"
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
@@ -1771,6 +1830,58 @@ components:
           type: integer
         FinalYBattLock:
           type: integer
+    SkuOffsetsUni:
+      type: object
+      required:
+        - Position1
+        - Position2
+        - Position3
+        - Position4
+        - Position5
+        - Position6
+        - Position7
+        - Position8
+        - Position9
+        - Position010
+        - Position011
+        - Position012
+        - Battery1
+        - Battery2
+        - Battery3
+        - Battery4
+      properties:
+        Position1:
+          type: integer
+        Position2:
+          type: integer
+        Position3:
+          type: integer
+        Position4:
+          type: integer
+        Position5:
+          type: integer
+        Position6:
+          type: integer
+        Position7:
+          type: integer
+        Position8:
+          type: integer
+        Position9:
+          type: integer
+        Position010:
+          type: integer
+        Position011:
+          type: integer
+        Position012:
+          type: integer
+        Battery1:
+          type: integer
+        Battery2:
+          type: integer
+        Battery3:
+          type: integer
+        Battery4:
+          type: integer
     BatterySlotsMask:
       type: array
       items:
@@ -1894,6 +2005,13 @@ components:
         stationid:
           type: string
         token:
+          type: string
+    OffsetConfigPayload:
+      type: object
+      required:
+        - file
+      properties:
+        file:
           type: string
     ApiError:
       type: object
