@@ -1845,6 +1845,12 @@ components:
         - Position010
         - Position011
         - Position012
+        - Position013
+        - Position014
+        - Position015
+        - Position016
+        - Position017
+        - Position018
         - Battery1
         - Battery2
         - Battery3
@@ -1873,6 +1879,18 @@ components:
         Position011:
           type: integer
         Position012:
+          type: integer
+        Position013:
+          type: integer
+        Position014:
+          type: integer
+        Position015:
+          type: integer
+        Position016:
+          type: integer
+        Position017:
+          type: integer
+        Position018:
           type: integer
         Battery1:
           type: integer
