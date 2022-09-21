@@ -954,6 +954,7 @@ components:
           movex,
           movez,
           movetest,
+          slottest,
           raisepad,
           lowerpad,
           openlat,
