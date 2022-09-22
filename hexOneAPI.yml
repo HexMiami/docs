@@ -1546,6 +1546,7 @@ components:
         - YSpeedAmount
         - YZeroSpeedAmount
         - YSlowAmount
+        - YTimeout
         - YStallCycle
         - YStallMax
         - YStall
@@ -1670,6 +1671,8 @@ components:
         YZeroSpeedAmount:
           type: integer
         YSlowAmount:
+          type: integer
+        YTimeout:
           type: integer
         YStallCycle:
           type: integer
