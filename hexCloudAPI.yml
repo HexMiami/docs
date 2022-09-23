@@ -696,7 +696,6 @@ components:
         - owner
         - name
         - lastOnlineStatus
-        - lastTelemetry
       properties:
         _id:
           $ref: "#/components/schemas/ID"
