@@ -1078,6 +1078,9 @@ components:
             door:
               type: string
               enum: [open, closed]
+            enclosure:
+              type: string
+              enum: [open, closed]
             pad:
               type: string
               enum: [empty, occupied]
@@ -1139,6 +1142,8 @@ components:
               type: number
             weather_precipitation:
               type: number
+            battery_info_atlas:
+              type: string
         battery_slot_status_123:
           type: array
           items:
