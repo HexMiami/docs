@@ -1084,6 +1084,15 @@ components:
             pad:
               type: string
               enum: [empty, occupied]
+            lat:
+              type: string
+              enum: [open, closed]
+            frontlong:
+              type: string
+              enum: [open, closed]
+            backlong:
+              type: string
+              enum: [open, closed]
             internal_temperature:
               type: number
             internal_temperature_celcius:
