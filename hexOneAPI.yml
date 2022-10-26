@@ -1084,6 +1084,9 @@ components:
             pad:
               type: string
               enum: [empty, occupied]
+            padatlas:
+              type: string
+              enum: [lowered, raised]
             lat:
               type: string
               enum: [open, closed]
@@ -1981,6 +1984,36 @@ components:
           default: true
           example: true
           description: whether to swap the battery as part of the demo routine
+        lowerpad:
+          type: boolean
+          default: true
+          example: true
+          description: whether to lower the pad as part of the demo atlas routine
+        raisepad:
+          type: boolean
+          default: true
+          example: true
+          description: whether to lower the pad as part of the demo atlas routine
+        closelat:
+          type: boolean
+          default: true
+          example: true
+          description: whether to close lat as part of the demo atlas routine
+        closelong:
+          type: boolean
+          default: true
+          example: true
+          description: whether to close long as part of the demo atlas routine
+        openlat:
+          type: boolean
+          default: true
+          example: true
+          description: whether to open lat as part of the demo atlas routine
+        openlong:
+          type: boolean
+          default: true
+          example: true
+          description: whether to open long as part of the demo atlas routine
     PasswordPayload:
       type: object
       required:
