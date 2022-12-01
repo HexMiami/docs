@@ -998,9 +998,14 @@ components:
           closelat,
           openlong,
           closelong,
+          openfrontlong,
+          openbacklong,
+          closefrontlong,
+          closebacklong,
           zeroy,
           zeroz,
           zeropad,
+          zeropower,
           zerolatch,
           horizontallatch,
           verticallatch,
@@ -1010,6 +1015,7 @@ components:
           movepad,
           movegantry,
           movey,
+          movepower,
           swappart1,
           swappart2,
           shimmyin,
@@ -1238,6 +1244,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorStatus"
+        firmware_version:
+          type: array
+          items:
+            $ref: "#/components/schemas/FirmwareVersion"
         motors_atlas:
           type: array
           items:
@@ -1418,6 +1428,16 @@ components:
           type: number
         power:
           type: number
+    FirmwareVersion:
+      type: object
+      required:
+        - name
+        - version
+      properties:
+        name:
+          type: string
+        version:
+          type: string
     MotorStatusAtlas:
       type: object
       required:
