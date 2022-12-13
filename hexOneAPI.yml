@@ -1706,6 +1706,47 @@ components:
         - MoveZFinal
         - FinalYBattPush
         - FinalYBattLock
+        - PadLower
+        - ZStall
+        - LatTbl
+        - LongTbl
+        - LatDistAmount2
+        - CenterMicrosteps2
+        - CenterAccelAmount2
+        - CenterSpeedAmount2
+        - CenterRMS2
+        - Microsteps1
+        - Microsteps2
+        - AccelAmount1
+        - AccelAmount2
+        - SpeedAmount1
+        - SpeedAmount2
+        - ZeroSpeedAmount1
+        - ZeroSpeedAmount2
+        - StallOffset1
+        - StallOffset2
+        - StallOffset3
+        - StallOffset4
+        - StallOffset5
+        - StallOffset6
+        - StallOffset7
+        - StallOffset8
+        - StallOffset9
+        - StallOffset10
+        - StallOffset11
+        - StallOffset12
+        - Offset1
+        - Offset2
+        - Offset3
+        - Offset4
+        - Offset5
+        - Offset6
+        - Offset7
+        - Offset8
+        - Offset9
+        - Offset10
+        - Offset11
+        - Offset12
       properties:
         RoofDist:
           type: integer
@@ -1912,6 +1953,88 @@ components:
         FinalYBattPush:
           type: integer
         FinalYBattLock:
+          type: integer
+        PadLower:
+          type: integer
+        ZStall:
+          type: integer
+        LatTbl:
+          type: integer
+        LongTbl:
+          type: integer
+        LatDistAmount2:
+          type: integer
+        CenterMicrosteps2:
+          type: integer
+        CenterAccelAmount2:
+          type: integer
+        CenterSpeedAmount2:
+          type: integer
+        CenterRMS2:
+          type: integer
+        Microsteps1:
+          type: integer
+        Microsteps2:
+          type: integer
+        AccelAmount1:
+          type: integer
+        AccelAmount2:
+          type: integer
+        SpeedAmount1:
+          type: integer
+        SpeedAmount2:
+          type: integer
+        ZeroSpeedAmount1:
+          type: integer
+        ZeroSpeedAmount2:
+          type: integer
+        StallOffset1:
+          type: integer
+        StallOffset2:
+          type: integer
+        StallOffset3:
+          type: integer
+        StallOffset4:
+          type: integer
+        StallOffset5:
+          type: integer
+        StallOffset6:
+          type: integer
+        StallOffset7:
+          type: integer
+        StallOffset8:
+          type: integer
+        StallOffset9:
+          type: integer
+        StallOffset10:
+          type: integer
+        StallOffset11:
+          type: integer
+        StallOffset12:
+          type: integer
+        Offset1:
+          type: integer
+        Offset2:
+          type: integer
+        Offset3:
+          type: integer
+        Offset4:
+          type: integer
+        Offset5:
+          type: integer
+        Offset6:
+          type: integer
+        Offset7:
+          type: integer
+        Offset8:
+          type: integer
+        Offset9:
+          type: integer
+        Offset10:
+          type: integer
+        Offset11:
+          type: integer
+        Offset12:
           type: integer
     SkuOffsetsUni:
       type: object
