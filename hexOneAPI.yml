@@ -994,6 +994,7 @@ components:
           slottest,
           raisepad,
           lowerpad,
+          midpad,
           openlat,
           closelat,
           openlong,
@@ -1028,6 +1029,7 @@ components:
           extracommand6,
           telemetryupdate,
           fullreport,
+          startup,
           batteryvision,
           abort,
         ]
@@ -2185,7 +2187,7 @@ components:
           type: boolean
           default: true
           example: true
-          description: whether to lower the pad as part of the demo atlas routine
+          description: whether to raise the pad as part of the demo atlas routine
         closelat:
           type: boolean
           default: true
