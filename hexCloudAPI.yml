@@ -826,6 +826,8 @@ components:
               type: number
             weather_precipitation:
               type: number
+            weather_data_source:
+              type: string
         battery_info:
           type: object
           required:
