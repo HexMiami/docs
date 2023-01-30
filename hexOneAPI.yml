@@ -986,6 +986,10 @@ components:
           updatenetwork,
           opengripper,
           closegripper,
+          openleftgripper,
+          openrightgripper,
+          closeleftgripper,
+          closerightgripper,
           zeroall,
           disablexyz,
           movex,
@@ -1207,6 +1211,8 @@ components:
             battery_info_atlas:
               type: string
             atlas_battery_swap_record:
+              type: string
+            serial:
               type: string
         battery_slot_status_123:
           type: array
