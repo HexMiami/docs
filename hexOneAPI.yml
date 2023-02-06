@@ -1140,16 +1140,16 @@ components:
               enum: [empty, occupied]
             padatlas:
               type: string
-              enum: [lowered, raised]
+              enum: [lowered, raised, unknown]
             lat:
               type: string
-              enum: [open, closed]
+              enum: [open, closed, unknown]
             frontlong:
               type: string
-              enum: [open, closed]
+              enum: [open, closed, unknown]
             backlong:
               type: string
-              enum: [open, closed]
+              enum: [open, closed, unknown]
             internal_temperature:
               type: number
             internal_temperature_celcius:
