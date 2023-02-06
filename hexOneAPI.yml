@@ -999,6 +999,8 @@ components:
           raisepad,
           lowerpad,
           midpad,
+          openeverything,
+          closeeverything,
           openlat,
           closelat,
           openlong,
@@ -2148,8 +2150,8 @@ components:
       type: array
       items:
         type: boolean
-      minItems: 28
-      maxItems: 28
+      minItems: 36
+      maxItems: 36
       example: [true, true, true, true, true, true, true, true]
     BatteryMemory:
       type: array
