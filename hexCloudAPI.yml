@@ -905,6 +905,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorStatus"
+        firmware_version:
+          type: array
+          items:
+            type: object
         error_message:
           type: string
           example: "Drone is in the bathroom"
