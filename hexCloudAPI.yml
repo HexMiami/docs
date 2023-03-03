@@ -407,9 +407,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: object
   /stationsUnresolvedErrors:
     get:
       description: "Get all stations with unresolved errors"
@@ -449,6 +447,46 @@ paths:
     get:
       description: "Get all error logs for a specific station"
       operationId: getStationFullErrorLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /stationSwapHistory/{id}:
+    get:
+      description: "Get a specific station swap history"
+      operationId: getSwapCountHistory
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: "Id of the station"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
+  /stationErrorCountHistory/{id}:
+    get:
+      description: "Get a specific station error count history"
+      operationId: getErrorCountHistory
       security:
         - bearerAuth: []
       parameters:
