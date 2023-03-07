@@ -369,6 +369,21 @@ paths:
             application/json:
               schema:
                 type: object
+  /allStationsActHistory:
+    get:
+      description: "Get a all stations activity history"
+      operationId: getAllStationsActivityData
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
   /checkStationErrorHistory/{id}/{jobId}:
     get:
       description: "Check a specific station error history"
