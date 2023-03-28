@@ -1040,6 +1040,7 @@ components:
           fullreport,
           startup,
           batteryvision,
+          batteryvisioncheck,
           abort,
         ]
     ActionRequest:
@@ -1144,6 +1145,9 @@ components:
             padatlas:
               type: string
               enum: [lowered, raised, unknown]
+            padbuttons:
+              type: string
+              enum: [left, right, both, none, unavailable]
             lat:
               type: string
               enum: [open, closed, unknown]
