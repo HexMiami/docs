@@ -478,6 +478,30 @@ paths:
             application/json:
               schema:
                 type: object
+  /getSelectStationsFullErrorLogs:
+    get:
+      summary: Get all error logs for select stations
+      operationId: getSelectStationsFullErrorLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: ids
+          description: "Array of IDs of stations to retrieve error logs for"
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
   /stationSwapHistory/{id}:
     get:
       description: "Get a specific station swap history"
