@@ -996,6 +996,7 @@ components:
           movez,
           movetest,
           slottest,
+          latchtest,
           raisepad,
           lowerpad,
           midpad,
@@ -1020,6 +1021,8 @@ components:
           unlocklatch,
           moveroof,
           movepad,
+          movepadleft,
+          movepadright,
           movegantry,
           movey,
           movepower,
@@ -1041,6 +1044,7 @@ components:
           startup,
           batteryvision,
           batteryvisioncheck,
+          resetserial,
           abort,
         ]
     ActionRequest:
@@ -1222,6 +1226,8 @@ components:
             atlas_battery_swap_record:
               type: string
             serial:
+              type: string
+            station_version:
               type: string
         battery_slot_status_123:
           type: array
