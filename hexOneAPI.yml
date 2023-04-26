@@ -1229,6 +1229,21 @@ components:
               type: string
             station_version:
               type: string
+            cycles_performed:
+              type: object
+              properties:
+                swap_count:
+                  type: integer
+                drone_toggle_count:
+                  type: integer
+                pad_cycle_count:
+                  type: integer
+                roof_cycle_count:
+                  type: integer
+                lat_cycle_count:
+                  type: integer
+                long_cycle_count:
+                  type: integer     
         battery_slot_status_123:
           type: array
           items:
@@ -1281,6 +1296,53 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorDcStatusAtlas"
+        error_history:
+          type: object
+          properties:
+            swapbattery:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            powerdronetoggle:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            openbox:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            closebox:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            raisepad:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            lowerpad:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            openlat:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            closelat:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            openlong:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            closelong:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
+            misc:
+              type: array
+              items:
+                $ref: "#/components/schemas/LatestError"
         error_message:
           type: string
           example: "Drone is in the bathroom"
@@ -1548,6 +1610,22 @@ components:
           type: number
         is_home:
           type: boolean
+    LatestError:
+      type: object
+      required:
+        - time
+        - job_id
+        - error
+        - error_code
+      properties:
+        time:
+          type: number
+        job_id:
+          type: string
+        error:
+          type: string
+        error_code:
+          type: string
     SkuOffsets:
       type: object
       required:
