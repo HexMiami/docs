@@ -416,6 +416,17 @@ paths:
       operationId: getStationsActive
       security:
         - bearerAuth: []
+      parameters:
+        - in: query
+          name: ids
+          description: "Array of IDs of stations"
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: "TODO"
@@ -429,6 +440,17 @@ paths:
       operationId: getStationsWithUnresolvedErrors
       security:
         - bearerAuth: []
+      parameters:
+        - in: query
+          name: ids
+          description: "Array of IDs of stations"
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: "TODO"
