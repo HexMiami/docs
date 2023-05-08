@@ -997,6 +997,7 @@ components:
           movetest,
           slottest,
           latchtest,
+          powermotortest,
           raisepad,
           lowerpad,
           midpad,
