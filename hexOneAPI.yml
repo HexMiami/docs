@@ -779,6 +779,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/weather_thresholds:
+    get:
+      summary: "Check current weather thresholds"
+      operationId: api.api.getWeatherThresholds
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "successfully got the weather threshold info"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherThresholdStatus"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      summary: "Change weather thresholds"
+      operationId: api.api.postWeatherThresholds
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeatherThresholdsPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
   /advanced/update_weatherflow_api:
     post:
       summary: "Update weatherflow api token"
@@ -1230,6 +1270,8 @@ components:
               type: string
             station_version:
               type: string
+            flight_software:
+              type: string
             cycles_performed:
               type: object
               properties:
@@ -1244,7 +1286,7 @@ components:
                 lat_cycle_count:
                   type: integer
                 long_cycle_count:
-                  type: integer     
+                  type: integer
         battery_slot_status_123:
           type: array
           items:
@@ -1429,6 +1471,39 @@ components:
           type: number
         slot_6:
           type: number
+    WeatherThresholdStatus:
+      type: object
+      properties:
+        weather_api_warning:
+          type: string
+        current_values:
+          type: object
+          properties:
+            precipitation:
+              type: number
+              description: precipitation in millimeters next hour
+            wind_speed:
+              type: number
+              description: wind speed in meters per hour
+            temperature:
+              type: number
+              description: temperature in celsius
+        thresholds:
+          type: object
+          properties:
+            precipitation:
+              type: number
+              description: user-set precipitation threshold in millimeters next hour
+            wind_speed:
+              type: number
+              description: user-set wind speed threshold in meters per hour
+            temperature_upper:
+              type: number
+              description: user-set upper temperature threshold in celsius
+            temperature_lower:
+              type: number
+              description: user-set lower temperature threshold in celsius
+
     TemperatureHistory:
       type: object
       required:
@@ -2361,6 +2436,22 @@ components:
           type: string
         upper_temp_threshold:
           type: string
+    WeatherThresholdsPayload:
+      type: object
+      required:
+        - precipitation
+        - wind_speed
+        - temperature_upper
+        - temperature_lower
+      properties:
+        precipitation:
+          type: number
+        wind_speed:
+          type: number
+        temperature_upper:
+          type: number
+        temperature_lower:
+          type: number
     WeatherFlowAPIPayload:
       type: object
       required:
