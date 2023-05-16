@@ -1491,6 +1491,8 @@ components:
         thresholds:
           type: object
           properties:
+            enable_thresholds:
+              type: boolean
             precipitation:
               type: number
               description: user-set precipitation threshold in millimeters next hour
@@ -2439,11 +2441,14 @@ components:
     WeatherThresholdsPayload:
       type: object
       required:
+        - enable_thresholds
         - precipitation
         - wind_speed
         - temperature_upper
         - temperature_lower
       properties:
+        enable_thresholds:
+          type: boolean
         precipitation:
           type: number
         wind_speed:
