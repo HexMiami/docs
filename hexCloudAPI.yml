@@ -798,6 +798,12 @@ components:
         description:
           type: string
           example: "South of Barn"
+        owner:
+          type: string
+        sharedWith:
+          type: array
+          items:
+            type: string
         productionStatus:
           $ref: "#/components/schemas/ProductionStatus"
         password:
@@ -845,7 +851,11 @@ components:
           $ref: "#/components/schemas/ID"
         owner:
           type: string
-          description: the user id of the owner (auth0)
+          description: the email of the owner
+        sharedWith:
+          type: array
+          items:
+            type: string
         name:
           type: string
           example: "hexone-abc0def0"
