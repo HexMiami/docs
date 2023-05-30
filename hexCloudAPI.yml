@@ -986,8 +986,6 @@ components:
           type: object
           required:
             - batteries
-            - current_battery
-            - next_battery
           properties:
             batteries:
               type: array
@@ -995,8 +993,10 @@ components:
                 $ref: "#/components/schemas/BatteryStatus"
             current_battery:
               type: integer
+              nullable: true
             next_battery:
               type: integer
+              nullable: true
         toggles:
           type: array
           items:
