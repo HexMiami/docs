@@ -1190,7 +1190,10 @@ components:
             padatlas:
               type: string
               enum: [lowered, raised, unknown]
-            padbuttons:
+            pad_buttons:
+              type: string
+              enum: [left, right, both, none, unavailable]
+            gantry_switches:
               type: string
               enum: [left, right, both, none, unavailable]
             lat:
