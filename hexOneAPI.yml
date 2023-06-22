@@ -449,6 +449,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsetsUni"
+  /advanced/descriptions_uni:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current set of sku descriptions"
+      operationId: api.api.getSkuDescriptionsUni
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The current sku descriptions"
+          content:
+            application/json:
+              schema:
+                type: object
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
