@@ -524,6 +524,30 @@ paths:
             application/json:
               schema:
                 type: object
+  /getSelectStationsCycleLogs:
+    get:
+      summary: Get all cycle logs for select stations
+      operationId: getSelectStationsCycleLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: ids
+          description: "Array of IDs of stations to retrieve cycle logs for"
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: "TODO"
+          content:
+            application/json:
+              schema:
+                type: object
   /stationSwapHistory/{id}:
     get:
       description: "Get a specific station swap history"
@@ -982,6 +1006,21 @@ components:
               type: number
             weather_data_source:
               type: string
+            cycles_performed:
+              type: object
+              properties:
+                swap_count:
+                  type: integer
+                drone_toggle_count:
+                  type: integer
+                pad_cycle_count:
+                  type: integer
+                roof_cycle_count:
+                  type: integer
+                lat_cycle_count:
+                  type: integer
+                long_cycle_count:
+                  type: integer
         battery_info:
           type: object
           required:
