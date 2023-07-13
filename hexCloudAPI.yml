@@ -541,6 +541,12 @@ paths:
             type: array
             items:
               type: string
+        - in: query
+          name: fullHistory
+          description: "Flag to indicate whether to retrieve the full history"
+          required: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "TODO"
