@@ -1152,7 +1152,11 @@ components:
         - lights
         - climate
         - motors
-        # - motors_atlas # Shouldn't be required
+        # Not required (used for Atlas)
+        # - firmware_version
+        # - motors_atlas
+        # - motors_dc_atlas
+        # - error_history
         - error_message
         - time
       properties:
@@ -1163,7 +1167,14 @@ components:
             - operation
             - system
             - door
+            # - enclosure
             - pad
+            # - padatlas
+            # - pad_buttons
+            # - lat
+            # - frontlong
+            # - backlong
+            # - gantry_switches
             - internal_temperature
             - internal_temperature_celcius
             - board_voltage
@@ -1187,6 +1198,14 @@ components:
             - weather_humidity
             - weather_pressure
             - weather_precipitation
+            # Added on Atlas
+            # - weather_data_source
+            # - battery_info_atlas
+            # - atlas_battery_swap_record
+            # - serial
+            # - station_version
+            # - flight_software
+            # - cycles_performed
           properties:
             station_type:
               type: string
@@ -2362,8 +2381,8 @@ components:
       type: array
       items:
         type: boolean
-      minItems: 36
-      maxItems: 36
+      minItems: 44
+      maxItems: 44
       example: [true, true, true, true, true, true, true, true]
     BatteryMemory:
       type: array
