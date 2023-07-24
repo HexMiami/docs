@@ -1325,6 +1325,8 @@ components:
                   type: integer
                 long_cycle_count:
                   type: integer
+            uni_type:
+              type: string
         battery_slot_status_123:
           type: array
           items:
