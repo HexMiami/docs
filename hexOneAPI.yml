@@ -2289,6 +2289,10 @@ components:
         - Position024
         - Position025
         - Position026
+        - Position027
+        - Position028
+        - Position029
+        - Position030
         - Battery1
         - Battery2
         - Battery3
@@ -2345,6 +2349,14 @@ components:
         Position025:
           type: integer
         Position026:
+          type: integer
+        Position027:
+          type: integer
+        Position028:
+          type: integer
+        Position029:
+          type: integer
+        Position030:
           type: integer
         Battery1:
           type: integer
