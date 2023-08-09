@@ -650,6 +650,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UnitConfigAtlas"
+  /advanced/batteries/enabled_unit_config_uni:
+    get:
+      summary: "returns an array of booleans that represents different unit configurations"
+      operationId: api.api.getUnitConfigUni
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for unit configurations"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitConfigUni"
+    post:
+      summary: "update which unit configuration is activated"
+      operationId: api.api.postUnitConfigUni
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnitConfigUni"
+      responses:
+        "200":
+          description: "returns array of booleans for unit configuration status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitConfigUni"
   /advanced/battery_memory:
     get:
       summary: "returns an array with one boolean where if true, remember the battery positions at boot (don't overwrite) and set has_discovered to true "
@@ -2401,6 +2438,13 @@ components:
       minItems: 44
       maxItems: 44
       example: [true, true, true, true, true, true, true, true]
+    UnitConfigUni:
+      type: array
+      items:
+        type: boolean
+      minItems: 24
+      maxItems: 24
+      example: [true, true, true, true, true, true, true, true]
     BatteryMemory:
       type: array
       items:
@@ -2438,33 +2482,33 @@ components:
           description: whether to swap the battery as part of the demo routine
         lowerpad:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to lower the pad as part of the demo atlas routine
         raisepad:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to raise the pad as part of the demo atlas routine
         closelat:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to close lat as part of the demo atlas routine
         closelong:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to close long as part of the demo atlas routine
         openlat:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to open lat as part of the demo atlas routine
         openlong:
           type: boolean
-          default: true
-          example: true
+          default: false
+          example: false
           description: whether to open long as part of the demo atlas routine
     PasswordPayload:
       type: object
