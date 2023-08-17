@@ -1030,6 +1030,30 @@ paths:
             text/plain:
               schema:
                 type: string
+  /check_hexcamera/{camera_number}:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get HexCamera Image"
+      operationId: api.api.getHexCameraImage
+      tags:
+        - logs
+      parameters:
+        - name: camera_number
+          in: path
+          description: "Camera number"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Picture for the specified HexCamera"
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
   /battery_vision_picture:
     get:
       security:
@@ -1141,6 +1165,7 @@ components:
           startup,
           batteryvision,
           batteryvisioncheck,
+          checkhexcameras,
           resetserial,
           abort,
         ]
