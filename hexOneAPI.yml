@@ -687,6 +687,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UnitConfigUni"
+  /advanced/batteries/enabled_unit_config_global:
+    get:
+      summary: "returns an array of booleans that represents different unit configurations"
+      operationId: api.api.getUnitConfigGlobal
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: "returns array of booleans for unit configurations"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitConfigGlobal"
+    post:
+      summary: "update which unit configuration is activated"
+      operationId: api.api.postUnitConfigGlobal
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnitConfigGlobal"
+      responses:
+        "200":
+          description: "returns array of booleans for unit configuration status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnitConfigGlobal"
   /advanced/battery_memory:
     get:
       summary: "returns an array with one boolean where if true, remember the battery positions at boot (don't overwrite) and set has_discovered to true "
@@ -781,6 +818,27 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/WeatherApiKeyPayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /advanced/manual_serial:
+    post:
+      summary: "Add manual serial command"
+      operationId: api.api.add_manual_serial_command
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManualSerialCommandPayload"
       responses:
         "200":
           description: ""
@@ -2470,6 +2528,13 @@ components:
       minItems: 24
       maxItems: 24
       example: [true, true, true, true, true, true, true, true]
+    UnitConfigGlobal:
+      type: array
+      items:
+        type: boolean
+      minItems: 12
+      maxItems: 12
+      example: [true, true, true, true, true, true, true, true]
     BatteryMemory:
       type: array
       items:
@@ -2568,6 +2633,13 @@ components:
         - apikey
       properties:
         apikey:
+          type: string
+    ManualSerialCommandPayload:
+      type: object
+      required:
+        - serial_command
+      properties:
+        serial_command:
           type: string
     CompressorPWMPayload:
       type: object
