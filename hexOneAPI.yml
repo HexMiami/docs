@@ -1104,6 +1104,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: timestamp # New parameter for cache-busting
+          in: query
+          description: "Timestamp for cache-busting"
+          schema:
+            type: integer # You might need to adjust the type based on your server's requirements
       responses:
         "200":
           description: "Picture for the specified HexCamera"
