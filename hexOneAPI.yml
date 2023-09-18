@@ -1223,6 +1223,7 @@ components:
           swapbatteryleft,
           swapbatteryright,
           hotswapbattery,
+          battslotreinsertion,
           telemetryupdate,
           fullreport,
           startup,
