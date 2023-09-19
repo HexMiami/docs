@@ -334,6 +334,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/schedule_battery_reinsert:
+    get:
+      summary: "returns the config for the atlas scheduled battery reinsert"
+      operationId: api.api.getScheduledAtlasBatteryReinsert
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AtlasBatteryReinsertSchedulePayload"
+    post:
+      summary: "Change Atlas Battery Reinsert Schedule"
+      operationId: api.api.scheduleAtlasBatteryReinsert
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AtlasBatteryReinsertSchedulePayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/offsets_atlas:
     get:
       security:
@@ -2548,6 +2584,40 @@ components:
       minItems: 1
       maxItems: 1
       example: [true]
+    AtlasBatteryReinsertSchedulePayload:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          default: false
+          description: enable or disable the scheduled battery reinsert
+        hour:
+          type: string
+          default: "00"
+        minute:
+          type: string
+          default: "00"
+        monday:
+          type: boolean
+          default: false
+        tuesday:
+          type: boolean
+          default: false
+        wednesday:
+          type: boolean
+          default: false
+        thursday:
+          type: boolean
+          default: false
+        friday:
+          type: boolean
+          default: false
+        saturday:
+          type: boolean
+          default: false
+        sunday:
+          type: boolean
+          default: false
     DemoConfig:
       type: object
       properties:
