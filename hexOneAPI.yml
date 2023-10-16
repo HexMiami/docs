@@ -1248,8 +1248,6 @@ components:
           movepower,
           swappart1,
           swappart2,
-          shimmyin,
-          shimmyout,
           extracommand1,
           extracommand2,
           extracommand3,
@@ -1836,7 +1834,7 @@ components:
         name:
           type: string
         current_position:
-          type: string
+          type: number
         zero_fail:
           type: boolean
         time_of_last_op:
