@@ -501,6 +501,54 @@ paths:
             application/json:
               schema:
                 type: object
+  /advanced/errorhistory:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get latest errors for each command"
+      operationId: api.api.getErrorHistory
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The latest errors for each command"
+          content:
+            application/json:
+              schema:
+                type: object
+  /advanced/firmware_versions:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get firmware versions array"
+      operationId: api.api.getFirmwareVersions
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The firmware versions array that is updated on initialization"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    post:
+      summary: "Request update firmware versions list"
+      operationId: api.api.updateFirmwareVersionsList
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
@@ -797,6 +845,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BatteryMemory"
+  /advanced/request_update_firmware:
+    post:
+      summary: "Request station firmware update"
+      operationId: api.api.requestUpdateFirmware
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "received the firmware update with version request"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FirmwareVersionPayload"
   /advanced/request_update:
     post:
       summary: "Request box update"
@@ -2761,6 +2830,14 @@ components:
           type: string
         token:
           type: string
+    FirmwareVersionPayload:
+      type: object
+      properties:
+        firmwareVersion:
+          type: string
+          description: "The firmware version to request the update for"
+      required:
+        - firmwareVersion
     OffsetConfigPayload:
       type: object
       required:
