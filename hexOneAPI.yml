@@ -1333,6 +1333,7 @@ components:
           batteryvision,
           batteryvisioncheck,
           checkhexcameras,
+          checkmotors,
           resetserial,
           abort,
         ]
@@ -1611,6 +1612,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorDcStatusAtlas"
+        motors_bldc_atlas:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorBldcStatusAtlas"
         error_history:
           type: object
           properties:
@@ -1959,6 +1964,37 @@ components:
         button:
           type: number
         is_home:
+          type: boolean
+    MotorBldcStatusAtlas:
+      type: object
+      required:
+        - name
+        - active
+        - button
+        - is_home
+        - using_EXT_board
+        - motion_time_set
+        - elapsed_time
+        - fg_signal_changed
+        - stopped_with_fg
+      properties:
+        name:
+          type: string
+        active:
+          type: boolean
+        button:
+          type: number
+        is_home:
+          type: boolean
+        using_EXT_board:
+          type: boolean
+        motion_time_set:
+          type: number
+        elapsed_time:
+          type: number
+        fg_signal_changed:
+          type: boolean
+        stopped_with_fg:
           type: boolean
     LatestError:
       type: object
