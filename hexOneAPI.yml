@@ -1268,6 +1268,7 @@ components:
           powerondrone,
           poweroffdrone,
           powerdronetoggle,
+          powertoggleswap,
           remotecontroltoggle,
           swapbattery,
           lightson,
