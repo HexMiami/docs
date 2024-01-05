@@ -1245,6 +1245,190 @@ paths:
               schema:
                 type: string
                 format: binary
+  /streaming/watch_stream_request:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to watch a webrtc stream"
+      operationId: api.api.watchStreamRequest
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api offer response for request to watch a webrtc stream"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/send_ice_candidate:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send ICE candidates for webrtc streaming"
+      operationId: api.api.sendIceCandidate
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api response for successfully receiving ICE candidate"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/send_ice_complete:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send ICE candidate transfer complete flag for webrtc streaming"
+      operationId: api.api.sendIceComplete
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api response for successfully receiving ICE candidate complete flag"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/start_stream_request:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to start the webrtc stream"
+      operationId: api.api.startStreamRequest
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api response for successfully starting a webrtc stream"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/stop_stream_request:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to stop a webrtc stream "
+      operationId: api.api.stopStreamRequest
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api response for successfully stopping a webrtc stream"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/check_available_hexameras:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to get TURN server info"
+      operationId: api.api.checkAvailableHexcameras
+      tags:
+        - streaming
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/turn_server_info:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to get TURN server info"
+      operationId: api.api.turnServerInfo
+      tags:
+        - streaming
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 
 components:
   securitySchemes:
