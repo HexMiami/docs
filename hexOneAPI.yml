@@ -2670,8 +2670,8 @@ components:
       type: array
       items:
         type: boolean
-      minItems: 44
-      maxItems: 44
+      minItems: 56
+      maxItems: 56
       example: [true, true, true, true, true, true, true, true]
     UnitConfigUni:
       type: array
