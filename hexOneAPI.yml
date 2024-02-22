@@ -1385,12 +1385,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /streaming/check_available_hexameras:
+  /streaming/check_available_hexcameras:
     get:
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Send request to get TURN server info"
+      summary: "Send request to get available hexameras"
       operationId: api.api.checkAvailableHexcameras
       tags:
         - streaming
@@ -1429,6 +1429,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /streaming/heartbeat-ping:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send current time as a heartbeat ping to keep stream session open"
+      operationId: api.api.streamHeartbeatPing
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Streaming api response for successfully receiving heartbeat ping"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 
 components:
   securitySchemes:
@@ -1445,7 +1473,8 @@ components:
   schemas:
     Command:
       type: string
-      enum: [
+      enum:
+        [
           openbox,
           closebox,
           powerondrone,
