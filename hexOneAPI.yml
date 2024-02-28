@@ -485,6 +485,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsetsUni"
+  /advanced/positions_uni:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get default set of sku positions for Universal"
+      operationId: api.api.getSkuPositionsUni
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "The default sku positions of Universal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkuOffsetsUni"
   /advanced/descriptions_uni:
     get:
       security:
@@ -1609,7 +1625,7 @@ components:
         # - firmware_version
         # - motors_atlas
         # - motors_dc_atlas
-        # - error_history
+        # - warn_message
         - error_message
         - time
       properties:
@@ -1836,53 +1852,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MotorBldcStatusAtlas"
-        error_history:
-          type: object
-          properties:
-            swapbattery:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            powerdronetoggle:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            openbox:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            closebox:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            raisepad:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            lowerpad:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            openlat:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            closelat:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            openlong:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            closelong:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
-            misc:
-              type: array
-              items:
-                $ref: "#/components/schemas/LatestError"
+        warn_message:
+          type: string
+          example: "Drone is going to the bathroom"
         error_message:
           type: string
           example: "Drone is in the bathroom"
