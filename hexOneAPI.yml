@@ -1567,7 +1567,7 @@ components:
           fullreport,
           startup,
           batteryvision,
-          batteryvisioncheck,
+          batteryvisionimmediate,
           checkhexcameras,
           checkmotors,
           resetserial,
@@ -1643,6 +1643,7 @@ components:
             # - lat
             # - frontlong
             # - backlong
+            # - latch
             # - gantry_switches
             - internal_temperature
             - internal_temperature_celcius
@@ -1709,6 +1710,9 @@ components:
             backlong:
               type: string
               enum: [open, closed, unknown]
+            latch:
+              type: string
+              enum: [zeroed, vertical, unlocked, horizontal, locked, unknown]
             internal_temperature:
               type: number
             internal_temperature_celcius:
