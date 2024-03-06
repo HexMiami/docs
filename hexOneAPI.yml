@@ -1209,6 +1209,35 @@ paths:
             text/plain:
               schema:
                 type: string
+  /advanced/update_hexcameras_immediate/{lights_on}:
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to immediately update camera images"
+      operationId: api.api.updateHexCameraImages
+      tags:
+        - advanced
+      parameters:
+        - name: lights_on
+          in: path
+          description: "Boolean to determine if we turn lights on before taking photos or not (default false)"
+          required: true
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: ""
+          content:
+            text/pain:
+              schema:
+                type: string
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /check_hexcamera/{camera_number}:
     get:
       security:
