@@ -370,6 +370,51 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/hex_relays_ip_address:
+    get:
+      summary: "Check current ip address assigned as hex_relays on local network"
+      operationId: api.api.getHexRelaysIpAddress
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HexRelaysIpAddressPayLoad"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      summary: "Update ip address assigned as hex_relays on local network"
+      operationId: api.api.postHexRelaysIpAddress
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HexRelaysIpAddressPayLoad"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/offsets_atlas:
     get:
       security:
@@ -3002,6 +3047,13 @@ components:
         sunday:
           type: boolean
           default: false
+    HexRelaysIpAddressPayLoad:
+      type: object
+      required:
+        - ip_address
+      properties:
+        ip_address:
+          type: string
     DemoConfig:
       type: object
       properties:
