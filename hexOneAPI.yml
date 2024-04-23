@@ -1832,6 +1832,7 @@ components:
             - pwm_compressor
             - location
             - network
+            # - network_name
             - gps_location
             - voltage_indicator
             - version
@@ -1921,6 +1922,8 @@ components:
                 type: number
               description: Coordinates [lat, lon]
             network:
+              type: string
+            network_name:
               type: string
             voltage_indicator:
               type: string
