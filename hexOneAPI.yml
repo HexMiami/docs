@@ -3182,6 +3182,11 @@ components:
           default: false
           example: false
           description: whether to open long as part of the demo atlas routine
+        hotswapbattery:
+          type: boolean
+          default: false
+          example: false
+          description: whether to hot swap the battery as part of the demo atlas routine
     PasswordPayload:
       type: object
       required:
