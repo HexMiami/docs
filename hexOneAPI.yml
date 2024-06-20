@@ -593,6 +593,34 @@ paths:
             application/json:
               schema:
                 type: object
+  /advanced/descriptions/unit_config:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get Unit Config Descriptions"
+      operationId: api.api.getUnitConfigDescriptions
+      tags:
+        - advanced
+      parameters:
+        - name: stationType
+          in: query
+          description: "Determine which unit config to retrieve"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/error_history:
     get:
       security:
@@ -1411,6 +1439,34 @@ paths:
               schema:
                 type: string
                 format: binary
+  /check_hexcamera_updated_time/{camera_number}:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get HexCamera Image Updated Time"
+      operationId: api.api.getHexCameraImageUpdatedTime
+      tags:
+        - logs
+      parameters:
+        - name: camera_number
+          in: path
+          description: "Camera number"
+          required: true
+          schema:
+            type: string
+        - name: timestamp # New parameter for cache-busting
+          in: query
+          description: "Timestamp for cache-busting"
+          schema:
+            type: integer # You might need to adjust the type based on your server's requirements
+      responses:
+        "200":
+          description: "Time updated for the specified HexCamera Image"
+          content:
+            text/plain:
+              schema:
+                type: string
   /battery_vision_picture:
     get:
       security:
@@ -1586,6 +1642,55 @@ paths:
       responses:
         "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /streaming/hexcameras_config:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get hexcameras configuration"
+      operationId: api.api.getHexCamerasConfig
+      tags:
+        - streaming
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update hexcameras configuration"
+      operationId: api.api.putHexCamerasConfig
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "Return the updated hexcameras configuration"
           content:
             application/json:
               schema:
