@@ -1840,6 +1840,9 @@ components:
           swapbatteryleft,
           swapbatteryright,
           hotswapbattery,
+          fullcycleswap,
+          fullcyclehotswap,
+          enabledronelinking,
           battslotreinsertion,
           telemetryupdate,
           fullreport,
@@ -1982,7 +1985,7 @@ components:
               enum: [left, right, both, none, unavailable]
             lat:
               type: string
-              enum: [open, closed, unknown]
+              enum: [open, closed, unknown, unavailable]
             frontlong:
               type: string
               enum: [open, closed, unknown]
