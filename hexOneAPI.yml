@@ -19,7 +19,11 @@ paths:
               $ref: "#/components/schemas/PasswordPayload"
       responses:
         "200":
-          description: ""
+          description: "Bearer auth token"
+          content:
+            application/json:
+              schema:
+                type: object
         default:
           description: Unexpected error
           content:
