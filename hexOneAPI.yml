@@ -169,6 +169,7 @@ paths:
           name: id
           schema:
             type: string
+          example: "f182428c009a47f0a594d7a3a1e91adb"
           required: true
           description: uuid.v4 of the action to get
       responses:
@@ -1401,6 +1402,7 @@ paths:
           required: true
           schema:
             type: boolean
+          example: false
       responses:
         "200":
           description: ""
@@ -1430,6 +1432,7 @@ paths:
           required: true
           schema:
             type: string
+          example: "1"
         - name: timestamp # New parameter for cache-busting
           in: query
           description: "Timestamp for cache-busting"
@@ -1459,6 +1462,7 @@ paths:
           required: true
           schema:
             type: string
+          example: "1"
         - name: timestamp # New parameter for cache-busting
           in: query
           description: "Timestamp for cache-busting"
@@ -1886,13 +1890,22 @@ components:
       required:
         - request_id
         - status
+        - statusEnum
+        - timestamp
         - command
       properties:
         request_id:
           type: string
         status:
           type: string
+          description: 'concatenated statusEnum + ": " + timestamp'
+          deprecated: true
+        statusEnum:
+          type: string
           enum: [unknown, queued, inprogress, done, failed, cancelled]
+        timestamp:
+          type: number
+          description: "Unix timestamp"
         command:
           $ref: "#/components/schemas/Command"
     TelemetryResponse:
@@ -1945,6 +1958,7 @@ components:
             - location
             - network
             # - network_name
+            # - mac_address
             - gps_location
             - voltage_indicator
             - version
@@ -1974,7 +1988,7 @@ components:
               enum: [open, closed]
             enclosure:
               type: string
-              enum: [open, closed]
+              enum: [open, closed, unknown]
             pad:
               type: string
               enum: [empty, occupied]
@@ -2017,6 +2031,7 @@ components:
               type: string
               enum: [enabled, disabled]
             rc_state:
+              deprecated: true
               type: string
               enum: [enabled, disabled]
             odroid_state:
@@ -2036,6 +2051,8 @@ components:
             network:
               type: string
             network_name:
+              type: string
+            mac_address:
               type: string
             voltage_indicator:
               type: string
