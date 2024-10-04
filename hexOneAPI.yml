@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.1.0
+  version: 3.6.1
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -113,6 +113,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActionPostResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /action/abort:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Aborts and cancels any inprogess/queued commands"
+      operationId: api.api.performAbort
+      tags:
+        - action
+      responses:
+        "200":
+          description: "Abort command sent successfully"
         default:
           description: Unexpected error
           content:
@@ -1714,7 +1732,7 @@ paths:
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Send request to get TURN server info"
+      summary: "Send request to get TURN and STUN server info"
       operationId: api.api.turnServerInfo
       tags:
         - streaming
@@ -1860,7 +1878,18 @@ components:
           checkhexcameras,
           checkmotors,
           resetserial,
-          abort,
+          reboot,
+          systemcheck,
+          toggle_autoac_enable,
+          toggle_autoac_disable,
+          toggle_heater_enable,
+          toggle_heater_disable,
+          toggle_cooler_enable,
+          toggle_cooler_disable,
+          toggle_remotecontrol_enable,
+          toggle_remotecontrol_disable,
+          toggle_odroid_enable,
+          toggle_odroid_disable,
         ]
     ActionRequest:
       type: object
@@ -1938,11 +1967,11 @@ components:
             - pad
             # - padatlas
             # - pad_buttons
+            # - gantry_switches
             # - lat
             # - frontlong
             # - backlong
             # - latch
-            # - gantry_switches
             - internal_temperature
             - internal_temperature_celcius
             - board_voltage
@@ -1976,6 +2005,7 @@ components:
             # - station_version
             # - flight_software
             # - cycles_performed
+            # - uni_type
           properties:
             station_type:
               type: string
@@ -1985,16 +2015,17 @@ components:
               type: string
             door:
               type: string
-              enum: [open, closed]
+              enum: [open, closed, unknown]
             enclosure:
+              deprecated: true
               type: string
               enum: [open, closed, unknown]
             pad:
               type: string
-              enum: [empty, occupied]
+              enum: [empty, occupied, unknown]
             padatlas:
               type: string
-              enum: [lowered, raised, unknown]
+              enum: [lowered, raised, mid, unknown]
             pad_buttons:
               type: string
               enum: [left, right, both, none, unavailable]
@@ -2006,13 +2037,22 @@ components:
               enum: [open, closed, unknown, unavailable]
             frontlong:
               type: string
-              enum: [open, closed, unknown]
+              enum: [open, closed, unknown, unavailable]
             backlong:
               type: string
-              enum: [open, closed, unknown]
+              enum: [open, closed, unknown, unavailable]
             latch:
               type: string
-              enum: [zeroed, vertical, unlocked, horizontal, locked, unknown]
+              enum:
+                [
+                  zeroed,
+                  vertical,
+                  unlocked,
+                  horizontal,
+                  locked,
+                  unknown,
+                  unavailable,
+                ]
             internal_temperature:
               type: number
             internal_temperature_celcius:
@@ -2033,10 +2073,10 @@ components:
             rc_state:
               deprecated: true
               type: string
-              enum: [enabled, disabled]
+              enum: [enabled, disabled, unavailable]
             odroid_state:
               type: string
-              enum: [enabled, disabled]
+              enum: [enabled, disabled, unavailable]
             lower_temp_threshold:
               type: number
             upper_temp_threshold:
@@ -3188,8 +3228,8 @@ components:
       type: array
       items:
         type: boolean
-      minItems: 56
-      maxItems: 56
+      minItems: 128
+      maxItems: 128
       example: [true, true, true, true, true, true, true, true]
     UnitConfigUni:
       type: array
