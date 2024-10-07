@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.6.1
+  version: 3.6.2
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1742,7 +1742,30 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/StunTurnServerConfig"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update the TURN and STUN server configuration for streaming"
+      operationId: api.api.updateTurnServerInfo
+      tags:
+        - streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StunTurnServerConfig"
+      responses:
+        "200":
+          description: ""
         default:
           description: Unexpected error
           content:
@@ -2097,6 +2120,8 @@ components:
             voltage_indicator:
               type: string
             location_data:
+              type: object
+            usb_status:
               type: object
             station_uptime:
               type: number
@@ -2552,6 +2577,29 @@ components:
         error:
           type: string
         error_code:
+          type: string
+    StunTurnServerConfig:
+      type: object
+      required:
+        - turn_url
+        - turn_port
+        - turn_protocol
+        - username
+        - credential
+      properties:
+        stun_url:
+          type: string
+        stun_port:
+          type: string
+        turn_url:
+          type: string
+        turn_port:
+          type: string
+        turn_protocol:
+          type: string
+        username:
+          type: string
+        credential:
           type: string
     SkuOffsets:
       type: object
