@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.6.2
+  version: 3.6.3
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1995,6 +1995,10 @@ components:
             # - frontlong
             # - backlong
             # - latch
+            # - left_grippers
+            # - right_grippers
+            # - grippers
+            # - lights
             - internal_temperature
             - internal_temperature_celcius
             - board_voltage
@@ -2076,6 +2080,18 @@ components:
                   unknown,
                   unavailable,
                 ]
+            left_grippers:
+              type: string
+              enum: [open, close, opening, closing, unknown, unavailable]
+            right_grippers:
+              type: string
+              enum: [open, close, opening, closing, unknown, unavailable]
+            grippers:
+              type: string
+              enum: [open, close, opening, closing, unknown, unavailable]
+            lights:
+              type: string
+              enum: [light, dark, unknown]
             internal_temperature:
               type: number
             internal_temperature_celcius:
