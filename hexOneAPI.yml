@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.6.3
+  version: 3.7.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1101,6 +1101,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/update_custom_title:
+    post:
+      summary: "Change custom title of station"
+      operationId: api.api.change_custom_title
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomTitlePayload"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/update_weather_api_key:
     post:
       summary: "Change weather api key in box"
@@ -1982,6 +2006,7 @@ components:
         status:
           type: object
           required:
+            # - title
             - station_type
             - operation
             - system
@@ -2034,6 +2059,8 @@ components:
             # - cycles_performed
             # - uni_type
           properties:
+            title:
+              type: string
             station_type:
               type: string
             operation:
@@ -3446,6 +3473,13 @@ components:
         current_password:
           type: string
         new_password:
+          type: string
+    CustomTitlePayload:
+      type: object
+      required:
+        - title
+      properties:
+        title:
           type: string
     WeatherApiKeyPayload:
       type: object
