@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.7.0
+  version: 3.8.3
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1925,6 +1925,7 @@ components:
           checkhexcameras,
           checkmotors,
           resetserial,
+          restartdriverboard,
           reboot,
           systemcheck,
           toggle_autoac_enable,
@@ -2024,6 +2025,7 @@ components:
             # - right_grippers
             # - grippers
             # - lights
+            # - battery_mask
             - internal_temperature
             - internal_temperature_celcius
             - board_voltage
@@ -2119,6 +2121,8 @@ components:
             lights:
               type: string
               enum: [light, dark, unknown]
+            battery_mask:
+              type: string
             internal_temperature:
               type: number
             internal_temperature_celcius:
@@ -2236,6 +2240,18 @@ components:
               type: integer
             next_battery:
               type: integer
+        charger_info:
+          type: object
+          required:
+            - batteries
+            - last_updated
+          properties:
+            batteries:
+              type: array
+              items:
+                $ref: "#/components/schemas/ChargerStatus"
+            last_updated:
+              type: number
         toggles:
           type: array
           items:
@@ -2357,6 +2373,43 @@ components:
           type: number
         slot_6:
           type: number
+    ChargerStatus:
+      type: object
+      nullable: true
+      required:
+        - name
+        - slot
+        - charger_level
+        - status
+        - sn
+        - last_updated
+        - voltage
+        - current
+        - temperature
+      properties:
+        name:
+          type: string
+        slot:
+          type: number
+        charger_level:
+          type: number
+        status:
+          type: string
+        sn:
+          type: string
+          nullable: true
+        last_updated:
+          type: number
+          nullable: true
+        voltage:
+          type: number
+          nullable: true
+        current:
+          type: number
+          nullable: true
+        temperature:
+          type: number
+          nullable: true
     WeatherThresholdStatus:
       type: object
       properties:
