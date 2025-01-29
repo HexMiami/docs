@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.8.3
+  version: 3.9.3
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1926,6 +1926,7 @@ components:
           checkmotors,
           resetserial,
           restartdriverboard,
+          restartcharger,
           reboot,
           systemcheck,
           toggle_autoac_enable,
