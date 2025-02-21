@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.9.3
+  version: 3.9.11
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -2052,6 +2052,7 @@ components:
             - weather_humidity
             - weather_pressure
             - weather_precipitation
+            - weather_last_updated
             # Added on Atlas
             # - weather_data_source
             # - battery_info_atlas
@@ -2189,8 +2190,17 @@ components:
               type: number
             weather_precipitation:
               type: number
+            weather_precipitation_last_minute:
+              type: number
+              nullable: true
+            weather_precipitation_minutes:
+              type: number
+              nullable: true
             weather_data_source:
               type: string
+            weather_last_updated:
+              type: integer
+              nullable: true
             battery_info_atlas:
               type: string
             atlas_battery_swap_record:
