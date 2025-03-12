@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.9.11
+  version: 3.10.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -119,6 +119,66 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/lockout:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current lockout status"
+      operationId: api.api.getLockStatus
+      tags:
+        - advanced
+      parameters:
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [iso, epoch]
+          description: "Optional. Set to 'epoch' for Unix timestamp responses. Defaults to 'iso'."
+      responses:
+        "200":
+          description: "Current lockout status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LockoutStatus"
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Lock the station until a specific timestamp"
+      operationId: api.api.lockStation
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        description: "Lockout settings with timestamp in ISO 8601 or Unix epoch format"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LockoutRequest"
+      responses:
+        "200":
+          description: "Lockout applied successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LockoutStatus"
+    delete:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Unlock the station immediately"
+      operationId: api.api.unlockStation
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "Station unlocked successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LockoutStatus"
   /action/abort:
     put:
       security:
@@ -361,6 +421,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkuOffsets"
+  /advanced/critical/external_commands:
+    post:
+      summary: "Sends pre-defined external commands"
+      operationId: api.api.sendExternalCommands
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      requestBody:
+        description: "Command payload to trigger predefined external actions."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExternalCommandsPayLoad"
+      responses:
+        "200":
+          description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/change_offset_config:
     post:
       summary: "Change Offset File"
@@ -1689,6 +1774,14 @@ paths:
       operationId: api.api.checkAvailableHexcameras
       tags:
         - streaming
+      parameters:
+        - name: check_usb_hub
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: "Set to true to check the USB hub status (default: false)"
       responses:
         "200":
           description: ""
@@ -1904,6 +1997,10 @@ components:
           movepower,
           swappart1,
           swappart2,
+          swappart3,
+          swappart4,
+          swappart5,
+          swappart6,
           extracommand1,
           extracommand2,
           extracommand3,
@@ -1986,6 +2083,30 @@ components:
           description: "Unix timestamp"
         command:
           $ref: "#/components/schemas/Command"
+    LockoutRequest:
+      type: object
+      required:
+        - lockUntil
+      properties:
+        lockUntil:
+          type: string
+          description: "Timestamp in ISO 8601 format (e.g., '2025-01-01T00:00:00Z') or Unix epoch (e.g., '1735689600')"
+          pattern: "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z|\\d{10})$"
+        reason:
+          type: string
+          description: "Optional reason for lockout"
+    LockoutStatus:
+      type: object
+      properties:
+        isLocked:
+          type: boolean
+          description: "Indicates if the station is currently locked"
+        lockUntil:
+          type: string
+          description: "Timestamp in ISO 8601 or Unix epoch format"
+        reason:
+          type: string
+          description: "Reason for the current lockout, if any"
     TelemetryResponse:
       type: object
       required:
@@ -3620,6 +3741,22 @@ components:
       properties:
         file:
           type: string
+    ExternalCommandsPayLoad:
+      type: object
+      required:
+        - external_command
+      properties:
+        external_command:
+          type: string
+          enum:
+            - reboot_pi
+            - update_tailscale
+            - restart_hexone_api
+            - restart_gstreamer_api
+            - restart_hexone_service
+            - background_update_hexone
+            - full_update_hexone
+            - reboot_cameras
     ApiError:
       type: object
       required:
