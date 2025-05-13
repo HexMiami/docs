@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.11.0
+  version: 3.11.1
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -215,6 +215,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /action/clear_history:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Requests HexONE to clear its action history, removes done and cancelled commands from recent commands."
+      operationId: api.api.clearActionHistory
+      tags:
+        - action
+      responses:
+        "200":
+          description: "Recent commands history cleared"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"               
   /action/recent:
     get:
       security:
