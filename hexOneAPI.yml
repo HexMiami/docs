@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.10.0
+  version: 3.11.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -1917,6 +1917,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /advanced/mqtt_dashboard_auth:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Send request to get auth for dashboard mqtt connection"
+      operationId: api.api.mqttDashboardAuth
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardMqttAuthResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 
 components:
   securitySchemes:
@@ -2790,6 +2812,16 @@ components:
           type: boolean
         stopped_with_fg:
           type: boolean
+    DashboardMqttAuthResponse:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
     LatestError:
       type: object
       required:
