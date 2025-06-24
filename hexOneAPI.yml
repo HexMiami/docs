@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.11.1
+  version: 3.13.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -232,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiError"               
+                $ref: "#/components/schemas/ApiError"
   /action/recent:
     get:
       security:
@@ -1531,6 +1531,138 @@ paths:
             text/plain:
               schema:
                 type: string
+  /replays/:
+    post:
+      summary: Manually trigger a replay clip generation
+      description: >
+        Generates a replay from the latest segments. 
+        If no `id` is given, one will be generated.
+        If an `id` is provided and already exists, the request is rejected.
+      operationId: api.api.createManualReplay
+      tags:
+        - replay
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Optional ID to use for the generated replay
+                  example: "b878dceb91cd4b64bd17dc5052b06e8a"
+      responses:
+        "200":
+          description: Replay(s) generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Done saving replay(s)"
+                  replay_ids:
+                    type: array
+                    items:
+                      type: string
+                      example: "b878dceb91cd4b64bd17dc5052b06e8a_manual_hexone"
+        "400":
+          description: Invalid input
+        "409":
+          description: Replay with specified ID already exists
+        "500":
+          description: Internal server error
+    get:
+      summary: Get list of replay files with metadata
+      description: Returns a list of replay files including job_id, size, and creation time.
+      operationId: api.api.getReplaysList
+      tags:
+        - replay
+      responses:
+        "200":
+          description: A JSON array of replay file metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReplaysList"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal server error
+  /replays/{replay_id}:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get replay video by replay_id (supports inline playback and partial content)"
+      operationId: api.api.getReplayById
+      tags:
+        - replay
+      parameters:
+        - in: path
+          name: replay_id
+          schema:
+            type: string
+          required: true
+          description: Unique replay identifier (usually job_id + "_hexone" or "_dashboard")
+          example: "f182428c009a47f0a594d7a3a1e91adb_hexone"
+        - in: query
+          name: download
+          schema:
+            type: boolean
+            default: false
+          required: false
+          description: >
+            Whether to download the replay video (true) or play inline in browser (false).
+            Defaults to false (inline playback).
+        - in: header
+          name: Range
+          schema:
+            type: string
+            example: "bytes=0-"
+          required: false
+          description: >
+            HTTP Range header to request partial content. Required for seeking or streaming video efficiently.
+      responses:
+        "200":
+          description: Full video file returned when Range header is not specified.
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        "206":
+          description: Partial video content returned for Range request.
+          headers:
+            Content-Range:
+              description: Byte range of content served.
+              schema:
+                type: string
+              example: "bytes 0-1048575/2097152"
+            Accept-Ranges:
+              description: Indicates the server supports range requests.
+              schema:
+                type: string
+              example: "bytes"
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Replay file not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /advanced/update_hexcameras_immediate/{lights_on}:
     post:
       security:
@@ -2063,6 +2195,7 @@ components:
           checkmotors,
           resetserial,
           restartdriverboard,
+          restartdriverboardunsafe,
           restartcharger,
           reboot,
           systemcheck,
@@ -2545,6 +2678,15 @@ components:
           type: number
         slot_6:
           type: number
+    BatteryExtraInfo:
+      type: object
+      additionalProperties: true
+      required:
+        - source
+      properties:
+        source:
+          type: string
+          enum: ["BS65"]
     ChargerStatus:
       type: object
       nullable: true
@@ -2562,7 +2704,7 @@ components:
         name:
           type: string
         slot:
-          type: number
+          type: integer
         charger_level:
           type: number
         status:
@@ -2582,6 +2724,10 @@ components:
         temperature:
           type: number
           nullable: true
+        extra:
+          type: object
+          nullable: true
+          $ref: "#/components/schemas/BatteryExtraInfo"
     WeatherThresholdStatus:
       type: object
       properties:
@@ -2856,6 +3002,40 @@ components:
           type: string
         error_code:
           type: string
+    ReplaysList:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Replay ID associated with the replay
+          source:
+            type: object
+            properties:
+              kind:
+                type: string
+                description: Type of replay
+              job_id:
+                type: string
+                description: Job ID associated with the replay
+              origin:
+                type: string
+                description: Source of the recording
+                enum:
+                  - hexone
+                  - dashboard
+                  - manual
+          filename:
+            type: string
+            description: Filename of the replay file
+          size:
+            type: integer
+            description: Size of the file in bytes
+          created:
+            type: number
+            format: int64
+            description: Unix timestamp of when the replay was created (in seconds)
     StunTurnServerConfig:
       type: object
       required:
