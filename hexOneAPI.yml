@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.13.0
+  version: 3.15.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -85,6 +85,24 @@ paths:
       responses:
         "200":
           description: ""
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /sessions/:
+    delete:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Log out all sessions"
+      operationId: api.api.sessions_remove_all
+      tags:
+        - auth
+      responses:
+        "204":
+          description: "Sessions all logged out successfully"
         default:
           description: Unexpected error
           content:
@@ -318,10 +336,11 @@ paths:
                   $ref: "#/components/schemas/BatteryHistory"
   /telemetry/temperature_history:
     get:
+      deprecated: true
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Get last 6 hours of temperature history"
+      summary: "Get last 24 hours of temperature history"
       operationId: api.api.getTemperatureHistory
       tags:
         - status
@@ -337,10 +356,11 @@ paths:
                   $ref: "#/components/schemas/TemperatureHistory"
   /telemetry/board_voltage_history:
     get:
+      deprecated: true
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Get last 6 hours of temperature history"
+      summary: "Get last 24 hours of voltage history"
       operationId: api.api.getBoardVoltageHistory
       tags:
         - status
@@ -354,6 +374,228 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/BoardVoltageHistory"
+  /metrics/system:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get historical system mtrics"
+      operationId: api.api.metrics_get_system
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (ISO8601 or UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (ISO8601 or UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map of compute systems to their compute status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CameraMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/cameras:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get historical camera connection status"
+      operationId: api.api.get_camera_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map of camera IDs to their connection history."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CameraMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/motors:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get historical motor connection status"
+      operationId: api.api.get_motor_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map of motor names to their connection history."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MotorMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/charger:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get historical charger data"
+      operationId: api.api.get_charger_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "Historical charger metrics grouped by timestamp."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargerMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/boards:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get historical board temperature and voltage"
+      operationId: api.api.get_board_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map of board identifiers to their temperature and voltage history."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BoardMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/events:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get metric events report"
+      operationId: api.api.get_event_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map containing grouped events data."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /toggle/{thing}/{toggle}:
     put:
       security:
@@ -1515,22 +1757,6 @@ paths:
             text/plain:
               schema:
                 type: string
-  /system_logs:
-    get:
-      security:
-        - bearerAuth: []
-        - cookieBearer: []
-      summary: "Returns /var/log/syslog from HexOS."
-      operationId: api.api.getSystemLogs
-      tags:
-        - logs
-      responses:
-        "200":
-          description: "syslog"
-          content:
-            text/plain:
-              schema:
-                type: string
   /replays/:
     post:
       summary: Manually trigger a replay clip generation
@@ -2095,7 +2321,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
       x-bearerInfoFunc: api.api.verify_token
     cookieBearer:
       type: apiKey
@@ -2287,6 +2512,7 @@ components:
         - battery_slot_status_123
         - battery_slot_status_456
         - battery_info
+        - network_info
         - toggles
         - lights
         - climate
@@ -2557,6 +2783,8 @@ components:
                 $ref: "#/components/schemas/ChargerStatus"
             last_updated:
               type: number
+        network_info:
+          $ref: "#/components/schemas/NetworkInfo"
         toggles:
           type: array
           items:
@@ -2728,6 +2956,23 @@ components:
           type: object
           nullable: true
           $ref: "#/components/schemas/BatteryExtraInfo"
+    NetworkInfo:
+      type: object
+      required:
+        - interfaces
+      properties:
+        interfaces:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/NetworkStatus"
+    NetworkStatus:
+      type: object
+      required:
+        - ip
+      properties:
+        ip:
+          type: string
+          description: The IPv4 address of this network interface
     WeatherThresholdStatus:
       type: object
       properties:
@@ -2762,6 +3007,219 @@ components:
             temperature_lower:
               type: number
               description: user-set lower temperature threshold in celsius
+    SystemDataPoint:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: "Unix timestamp of the data point."
+        cpu_usage:
+          type: number
+          nullable: true
+          description: "CPU usage"
+        cpu_temperature:
+          type: number
+          nullable: true
+          description: "CPU temperature"
+        adc_temperature:
+          type: number
+          nullable: true
+          description: "ADC temperature"
+    CamerasDataPoint:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: "Unix timestamp of the data point."
+        connected:
+          type: boolean
+          description: "Whether the camera was connected at this timestamp."
+    CameraMetricsResponse:
+      type: object
+      properties:
+        cameras:
+          type: object
+          description: "A dictionary where keys are camera IDs and values are their history."
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/CamerasDataPoint"
+    MotorsDataPoint:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: "Unix timestamp of the data point."
+        connected:
+          type: boolean
+          description: "Whether the motor was connected at this timestamp."
+    MotorMetricsResponse:
+      type: object
+      properties:
+        motors:
+          type: object
+          description: "A dictionary where keys are motor names and values are their history."
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/MotorsDataPoint"
+    ChargerDataPoint:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: "Unix timestamp of the data point."
+        name:
+          type: string
+        slot:
+          type: integer
+        charger_level:
+          type: number
+        status:
+          type: string
+          nullable: true
+        last_updated:
+          type: number
+          nullable: true
+        voltage:
+          type: number
+          nullable: true
+        current:
+          type: number
+          nullable: true
+        temperature:
+          type: number
+          nullable: true
+        extra:
+          type: object
+          nullable: true
+          $ref: "#/components/schemas/BatteryExtraInfo"
+    ChargerMetricsResponse:
+      type: object
+      properties:
+        charger:
+          type: object
+          description: "A dictionary where keys are timestamps and values are their history."
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/ChargerDataPoint"
+    BoardDataPoint:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: "Unix timestamp of the data point."
+        temperature:
+          type: number
+          nullable: true
+          description: "Board temperature in Celsius."
+        voltage:
+          type: number
+          nullable: true
+          description: "Board voltage."
+    BoardMetricsResponse:
+      type: object
+      properties:
+        boards:
+          type: object
+          description: "A dictionary where keys are board identifiers and values are their history."
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/BoardDataPoint"
+    EventMetricsResponse:
+      type: object
+      properties:
+        motors_disconnections:
+          type: array
+          items:
+            $ref: "#/components/schemas/MotorDisconnectEvent"
+        cameras_disconnections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CameraDisconnectEvent"
+        system_undervoltage:
+          type: array
+          items:
+            $ref: "#/components/schemas/SystemThrottleEvent"
+        system_frequency_capped:
+          type: array
+          items:
+            $ref: "#/components/schemas/SystemThrottleEvent"
+        system_throttled:
+          type: array
+          items:
+            $ref: "#/components/schemas/SystemThrottleEvent"
+        system_temp_limit:
+          type: array
+          items:
+            $ref: "#/components/schemas/SystemThrottleEvent"
+        board_connection_attempt:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoardEvent"
+        board_connection_timeout:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoardEvent"
+        board_log_warning:
+          type: array
+          items:
+            $ref: "#/components/schemas/BoardLogEvent"
+    BoardEvent:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: double
+          description: "Unix timestamp of board event"
+        board_identifier:
+          type: string
+          description: "Board identifier"
+    BoardLogEvent:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: double
+          description: "Unix timestamp of board event"
+        board_identifier:
+          type: string
+          description: "Board identifier"
+        message:
+          type: string
+          description: "Message"
+    MotorDisconnectEvent:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: double
+          description: "Unix timestamp when the disconnection was detected."
+        motor:
+          type: string
+          description: "Name of the motor that disconnected."
+    CameraDisconnectEvent:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: double
+          description: "Unix timestamp when the disconnection was detected."
+        camera:
+          type: string
+          description: "Identifier of the camera that disconnected."
+    SystemThrottleEvent:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          format: double
+          description: "Unix timestamp when the disconnection was detected."
+        state:
+          type: boolean
+          description: "The state the system changed to for this throttle condition."
 
     TemperatureHistory:
       type: object
@@ -3026,6 +3484,10 @@ components:
                   - hexone
                   - dashboard
                   - manual
+              command:
+                type: string
+                description: Command associated with the replay (optional)
+                nullable: true
           filename:
             type: string
             description: Filename of the replay file
