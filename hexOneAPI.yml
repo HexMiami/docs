@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.15.0
+  version: 3.16.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -324,7 +324,21 @@ paths:
       operationId: api.api.getBatteryHistory
       tags:
         - status
-        - batteries
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: "battery history"
@@ -404,7 +418,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CameraMetricsResponse"
+                $ref: "#/components/schemas/SystemMetricsResponse"
         default:
           description: Unexpected error
           content:
@@ -509,6 +523,15 @@ paths:
           schema:
             type: string
             format: date-time
+        - name: include
+          in: query
+          required: false
+          description: |
+            Comma-separated list of optional fields to include in the response.
+            The fields `slot` and `status` are always included and cannot be excluded.
+            Valid optional fields: timestamp, charger_level, last_updated, voltage, current, temperature
+          schema:
+            type: string
       responses:
         "200":
           description: "Historical charger metrics grouped by timestamp."
@@ -1761,7 +1784,7 @@ paths:
     post:
       summary: Manually trigger a replay clip generation
       description: >
-        Generates a replay from the latest segments. 
+        Generates a replay from the latest segments.
         If no `id` is given, one will be generated.
         If an `id` is provided and already exists, the request is rejected.
       operationId: api.api.createManualReplay
@@ -2719,7 +2742,7 @@ components:
             weather_data_source:
               type: string
             weather_last_updated:
-              type: integer
+              type: number
               nullable: true
             battery_info_atlas:
               type: string
@@ -2859,21 +2882,21 @@ components:
           items:
             type: object
             required:
-              - voltage
-              - current
-              - on_off
               - time
+              - status
             properties:
+              time:
+                type: number
               voltage:
                 type: number
               current:
                 type: number
-              on_off:
-                type: string
-                enum: [ON, OFF]
-              time:
+              temperature:
                 type: number
-                format: float64
+              charger_level:
+                type: number
+              status:
+                type: string
     BatterySlotStatus123:
       type: object
       required:
@@ -2914,7 +2937,7 @@ components:
       properties:
         source:
           type: string
-          enum: ["BS65"]
+          enum: ["BS65", "BS60"]
     ChargerStatus:
       type: object
       nullable: true
@@ -2953,9 +2976,9 @@ components:
           type: number
           nullable: true
         extra:
-          type: object
+          allOf:
+            - $ref: "#/components/schemas/BatteryExtraInfo"
           nullable: true
-          $ref: "#/components/schemas/BatteryExtraInfo"
     NetworkInfo:
       type: object
       required:
@@ -2971,7 +2994,9 @@ components:
         - ip
       properties:
         ip:
-          type: string
+          type: array
+          items:
+            type: string
           description: The IPv4 address of this network interface
     WeatherThresholdStatus:
       type: object
@@ -3025,6 +3050,14 @@ components:
           type: number
           nullable: true
           description: "ADC temperature"
+    SystemMetricsResponse:
+      type: object
+      properties:
+        compute:
+          type: array
+          description: "List of system metrics data points."
+          items:
+            $ref: "#/components/schemas/SystemDataPoint"
     CamerasDataPoint:
       type: object
       properties:
@@ -3034,9 +3067,28 @@ components:
         connected:
           type: boolean
           description: "Whether the camera was connected at this timestamp."
+    CameraConnectionRatio:
+      type: object
+      required:
+        - connected_count
+        - disconnected_count
+      properties:
+        connected_count:
+          type: integer
+          description: Number of data points where the camera was connected during the time range.
+        disconnected_count:
+          type: integer
+          description: Number of data points where the camera was disconnected during the time range.
     CameraMetricsResponse:
       type: object
       properties:
+        service:
+          type: object
+          description: |
+            A mapping of camera IDs to their aggregated connection statistics,
+            including counts of connected and disconnected data points over the queried period.
+          additionalProperties:
+            $ref: "#/components/schemas/CameraConnectionRatio"
         cameras:
           type: object
           description: "A dictionary where keys are camera IDs and values are their history."
@@ -3065,12 +3117,13 @@ components:
               $ref: "#/components/schemas/MotorsDataPoint"
     ChargerDataPoint:
       type: object
+      required:
+        - slot
+        - status
       properties:
         timestamp:
           type: number
           description: "Unix timestamp of the data point."
-        name:
-          type: string
         slot:
           type: integer
         charger_level:
@@ -3081,6 +3134,8 @@ components:
         last_updated:
           type: number
           nullable: true
+        sn:
+          type: string
         voltage:
           type: number
           nullable: true
@@ -3090,13 +3145,16 @@ components:
         temperature:
           type: number
           nullable: true
-        extra:
-          type: object
-          nullable: true
-          $ref: "#/components/schemas/BatteryExtraInfo"
     ChargerMetricsResponse:
       type: object
       properties:
+        status_ratio:
+          type: object
+          description: "Mapping of slot numbers to their status counts."
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
         charger:
           type: object
           description: "A dictionary where keys are timestamps and values are their history."
