@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.16.0
+  version: 3.17.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -582,7 +582,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-  /metrics/events:
+  /metrics/health/events:
     get:
       security:
         - bearerAuth: []
@@ -613,6 +613,43 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EventMetricsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /metrics/health/summary:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get metric events report"
+      operationId: api.api.get_summary_metrics
+      tags:
+        - metrics
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Start of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          description: End of the time range (UNIX timestamp)
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "A map containing grouped events data."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SummaryMetricsResponse"
         default:
           description: Unexpected error
           content:
@@ -2882,21 +2919,21 @@ components:
           items:
             type: object
             required:
+              - voltage
+              - current
+              - on_off
               - time
-              - status
             properties:
-              time:
-                type: number
               voltage:
                 type: number
               current:
                 type: number
-              temperature:
-                type: number
-              charger_level:
-                type: number
-              status:
+              on_off:
                 type: string
+                enum: [ON, OFF]
+              time:
+                type: number
+                format: float64
     BatterySlotStatus123:
       type: object
       required:
@@ -3082,13 +3119,6 @@ components:
     CameraMetricsResponse:
       type: object
       properties:
-        service:
-          type: object
-          description: |
-            A mapping of camera IDs to their aggregated connection statistics,
-            including counts of connected and disconnected data points over the queried period.
-          additionalProperties:
-            $ref: "#/components/schemas/CameraConnectionRatio"
         cameras:
           type: object
           description: "A dictionary where keys are camera IDs and values are their history."
@@ -3148,13 +3178,6 @@ components:
     ChargerMetricsResponse:
       type: object
       properties:
-        status_ratio:
-          type: object
-          description: "Mapping of slot numbers to their status counts."
-          additionalProperties:
-            type: object
-            additionalProperties:
-              type: integer
         charger:
           type: object
           description: "A dictionary where keys are timestamps and values are their history."
@@ -3225,6 +3248,23 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BoardLogEvent"
+    SummaryMetricsResponse:
+      type: object
+      properties:
+        camera_connection_counts:
+          type: object
+          description: |
+            A mapping of camera IDs to their aggregated connection statistics,
+            including counts of connected and disconnected data points over the queried period.
+          additionalProperties:
+            $ref: "#/components/schemas/CameraConnectionRatio"
+        slot_status_counts:
+          type: object
+          description: "Mapping of slot numbers to their status counts."
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
     BoardEvent:
       type: object
       properties:
