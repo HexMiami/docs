@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.17.0
+  version: 3.18.0
   title: hexOneAPI
 servers:
   - url: http://localhost:8080
@@ -317,6 +317,7 @@ paths:
                 $ref: "#/components/schemas/ApiError"
   /telemetry/battery_history:
     get:
+      deprecated: true
       security:
         - bearerAuth: []
         - cookieBearer: []
@@ -709,7 +710,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets"
-      operationId: api.api.getSkuOffsets
+      operationId: api.api.get_sku_offsets
       tags:
         - advanced
       responses:
@@ -724,7 +725,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets"
-      operationId: api.api.putSkuOffsets
+      operationId: api.api.put_sku_offsets
       tags:
         - advanced
       requestBody:
@@ -782,7 +783,7 @@ paths:
             schema:
               $ref: "#/components/schemas/OffsetConfigPayload"
       responses:
-        "200":
+        "204":
           description: ""
         default:
           description: Unexpected error
@@ -880,7 +881,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets for Atlas"
-      operationId: api.api.getSkuOffsetsAtlas
+      operationId: api.api.get_sku_offsets_atlas
       tags:
         - advanced
       responses:
@@ -895,7 +896,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets for Atlas"
-      operationId: api.api.putSkuOffsetsAtlas
+      operationId: api.api.put_sku_offsets_atlas
       tags:
         - advanced
       requestBody:
@@ -918,7 +919,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get default set of sku positions for Atlas"
-      operationId: api.api.getSkuPositionsAtlas
+      operationId: api.api.get_sku_positions_atlas
       tags:
         - advanced
       responses:
@@ -957,7 +958,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets"
-      operationId: api.api.getSkuOffsetsUni
+      operationId: api.api.get_sku_offsets_uni
       tags:
         - advanced
       responses:
@@ -972,7 +973,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets"
-      operationId: api.api.putSkuOffsetsUni
+      operationId: api.api.put_sku_offsets_uni
       tags:
         - advanced
       requestBody:
@@ -995,7 +996,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get default set of sku positions for Universal"
-      operationId: api.api.getSkuPositionsUni
+      operationId: api.api.get_sku_positions_uni
       tags:
         - advanced
       responses:
@@ -1438,8 +1439,8 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       responses:
-        "200":
-          description: "received the firmware update with version request"
+        "202":
+          description: "Firmware update queued"
         default:
           description: Unexpected error
           content:
@@ -1698,8 +1699,8 @@ paths:
                 $ref: "#/components/schemas/ApiError"
   /demo:
     get:
-      summary: "returns whether the unit is in demo mode"
-      operationId: api.api.getDemoStatus
+      summary: "Get current demo mode status"
+      operationId: api.api.get_demo_status
       tags:
         - demo
       security:
@@ -1707,7 +1708,7 @@ paths:
         - cookieBearer: []
       responses:
         "200":
-          description: "whether the unit is in demo mode"
+          description: "Returns whether the unit is in demo mode and its configuration"
           content:
             application/json:
               schema:
@@ -1722,52 +1723,64 @@ paths:
                     example: false
                   configuration:
                     $ref: "#/components/schemas/DemoConfig"
-  /demo/enable:
+  /demo/config:
     post:
+      summary: "Update the demo configuration"
+      operationId: api.api.post_demo_config
+      tags:
+        - demo
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Enable Demo Mode"
-      operationId: api.api.postDemoEnable
-      tags:
-        - demo
       requestBody:
         required: true
-        description: "demo mode configuration"
+        description: "Demo configuration to apply"
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/DemoConfig"
       responses:
         "200":
-          description: "The current demo configuration offsets"
+          description: "The updated configuration"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DemoConfig"
-  /demo/disable:
-    post:
+  /demo/mode:
+    put:
+      summary: "Enable Demo Mode"
+      operationId: api.api.enable_demo_mode
+      tags:
+        - demo
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Enable disable Mode"
-      operationId: api.api.postDemoDisable
-      tags:
-        - demo
       responses:
-        "200":
-          description: "The current demo configuration offsets"
+        "204":
+          description: "Demo mode enabled successfully"
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - message
-                properties:
-                  message:
-                    type: string
-                    default: "ok"
-                    example: "ok"
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      summary: "Disable Demo Mode"
+      operationId: api.api.disable_demo_mode
+      tags:
+        - demo
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "204":
+          description: "Demo mode disabled successfully"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /health:
     get:
       summary: "Returns a 200 if we are online"
@@ -2440,6 +2453,7 @@ components:
           zeroz,
           zeropad,
           zeropower,
+          extendpower,
           zerolatch,
           horizontallatch,
           verticallatch,
@@ -2481,6 +2495,10 @@ components:
           resetserial,
           restartdriverboard,
           restartdriverboardunsafe,
+          serialenable,
+          serialdisable,
+          firmwareupdate,
+          firmwareupdateunsafe,
           restartcharger,
           reboot,
           systemcheck,
@@ -2602,6 +2620,7 @@ components:
             # - frontlong
             # - backlong
             # - latch
+            # - power_motor
             # - left_grippers
             # - right_grippers
             # - grippers
@@ -2653,7 +2672,7 @@ components:
               type: string
             door:
               type: string
-              enum: [open, closed, unknown]
+              enum: [open, closed, opening, closing, unknown]
             enclosure:
               deprecated: true
               type: string
@@ -2663,7 +2682,7 @@ components:
               enum: [empty, occupied, unknown]
             padatlas:
               type: string
-              enum: [lowered, raised, mid, unknown]
+              enum: [lowered, raised, lowering, raising, mid, moving, unknown]
             pad_buttons:
               type: string
               enum: [left, right, both, none, unavailable]
@@ -2672,13 +2691,16 @@ components:
               enum: [left, right, both, none, unavailable]
             lat:
               type: string
-              enum: [open, closed, unknown, unavailable]
+              enum:
+                [open, closed, opening, closing, moving, unknown, unavailable]
             frontlong:
               type: string
-              enum: [open, closed, unknown, unavailable]
+              enum:
+                [open, closed, opening, closing, moving, unknown, unavailable]
             backlong:
               type: string
-              enum: [open, closed, unknown, unavailable]
+              enum:
+                [open, closed, opening, closing, moving, unknown, unavailable]
             latch:
               type: string
               enum:
@@ -2688,9 +2710,14 @@ components:
                   unlocked,
                   horizontal,
                   locked,
+                  zeroing,
+                  turning,
                   unknown,
                   unavailable,
                 ]
+            power_motor:
+              type: string
+              enum: [zeroed, extended, zeroing, extending, unknown, unavailable]
             left_grippers:
               type: string
               enum: [open, close, opening, closing, unknown, unavailable]
@@ -2810,10 +2837,12 @@ components:
               type: string
         battery_slot_status_123:
           type: array
+          deprecated: true
           items:
             $ref: "#/components/schemas/BatterySlotStatus123"
         battery_slot_status_456:
           type: array
+          deprecated: true
           items:
             $ref: "#/components/schemas/BatterySlotStatus456"
         battery_info:
@@ -2825,6 +2854,7 @@ components:
           properties:
             batteries:
               type: array
+              deprecated: true
               items:
                 $ref: "#/components/schemas/BatteryStatus"
             current_battery:
@@ -3535,9 +3565,12 @@ components:
     DashboardMqttAuthResponse:
       type: object
       required:
+        - topic_root
         - username
         - password
       properties:
+        topic_root:
+          type: string
         username:
           type: string
         password:
@@ -4362,66 +4395,50 @@ components:
     DemoConfig:
       type: object
       properties:
+        # --- Common Properties ---
         openbox:
           type: boolean
           default: false
-          example: false
-          description: whether to open the box as part of the demo routine
         closebox:
           type: boolean
           default: false
-          example: false
-          description: whether to close the box as part of the demo routine
-        powerondrone:
-          type: boolean
-          default: false
-          example: false
-          description: whether to power the drone on as part of the demo routine
-        poweroffdrone:
-          type: boolean
-          default: false
-          example: false
-          description: whether to power the drone off as part of the demo routine
         swapbattery:
           type: boolean
           default: true
-          example: true
-          description: whether to swap the battery as part of the demo routine
+        powerondrone:
+          type: boolean
+          default: false
+        poweroffdrone:
+          type: boolean
+          default: false
+        # --- Atlas Specific Properties ---
         lowerpad:
           type: boolean
           default: false
-          example: false
-          description: whether to lower the pad as part of the demo atlas routine
         raisepad:
           type: boolean
           default: false
-          example: false
-          description: whether to raise the pad as part of the demo atlas routine
         closelat:
           type: boolean
           default: false
-          example: false
-          description: whether to close lat as part of the demo atlas routine
         closelong:
           type: boolean
           default: false
-          example: false
-          description: whether to close long as part of the demo atlas routine
         openlat:
           type: boolean
           default: false
-          example: false
-          description: whether to open lat as part of the demo atlas routine
         openlong:
           type: boolean
           default: false
-          example: false
-          description: whether to open long as part of the demo atlas routine
         hotswapbattery:
           type: boolean
           default: false
-          example: false
-          description: whether to hot swap the battery as part of the demo atlas routine
+        openeverything:
+          type: boolean
+          default: false
+        closeeverything:
+          type: boolean
+          default: false
     PasswordPayload:
       type: object
       required:
