@@ -1,9 +1,9 @@
 openapi: 3.0.0
 info:
-  version: 3.18.0
-  title: hexOneAPI
+  version: 3.19.0
+  title: hexONE API
 servers:
-  - url: http://localhost:8080
+  - url: /api
 paths:
   /auth/login:
     post:
@@ -1284,7 +1284,7 @@ paths:
   /advanced/batteries/enabled_unit_config_atlas:
     get:
       summary: "returns an array of booleans that represents different unit configurations"
-      operationId: api.api.getUnitConfigAtlas
+      operationId: api.api.unit_config_get
       tags:
         - advanced
       security:
@@ -1299,7 +1299,7 @@ paths:
                 $ref: "#/components/schemas/UnitConfigAtlas"
     post:
       summary: "update which unit configuration is activated"
-      operationId: api.api.postUnitConfigAtlas
+      operationId: api.api.unit_config_post
       tags:
         - advanced
       security:
@@ -1463,8 +1463,8 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       responses:
-        "200":
-          description: ""
+        "202":
+          description: "Update queued"
         default:
           description: Unexpected error
           content:
@@ -2767,6 +2767,7 @@ components:
               items:
                 type: number
               description: Coordinates [lat, lon]
+              nullable: true
             network:
               type: string
             network_name:
@@ -2777,6 +2778,7 @@ components:
               type: string
             location_data:
               type: object
+              nullable: true
             usb_status:
               type: object
             station_uptime:
@@ -2875,6 +2877,8 @@ components:
               type: number
         network_info:
           $ref: "#/components/schemas/NetworkInfo"
+        driver_board_info:
+          $ref: "#/components/schemas/DriverBoardInfo"
         toggles:
           type: array
           items:
@@ -3065,6 +3069,68 @@ components:
           items:
             type: string
           description: The IPv4 address of this network interface
+    DriverBoardConnectionSerial:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+        - path
+      properties:
+        type:
+          type: string
+        path:
+          type: string
+    DriverBoardConnectionMQTT:
+      type: object
+      discriminator:
+        propertyName: type
+      required:
+        - type
+        - path
+      properties:
+        type:
+          type: string
+        path:
+          type: string
+    DriverBoardStatus:
+      type: object
+      nullable: true
+      required:
+        - uptime_micros
+      properties:
+        uptime_micros:
+          type: integer
+    DriverBoard:
+      type: object
+      required:
+        - type
+        - id
+        - connection
+        - status
+      properties:
+        type:
+          type: number
+          nullable: true
+        id:
+          type: string
+          nullable: true
+        connection:
+          anyOf:
+            - $ref: "#/components/schemas/DriverBoardConnectionSerial"
+            - $ref: "#/components/schemas/DriverBoardConnectionMQTT"
+        status:
+          oneOf:
+            - $ref: "#/components/schemas/DriverBoardStatus"
+    DriverBoardInfo:
+      type: object
+      required:
+        - boards
+      properties:
+        boards:
+          type: array
+          items:
+            $ref: "#/components/schemas/DriverBoard"
     WeatherThresholdStatus:
       type: object
       properties:
@@ -4539,6 +4605,10 @@ components:
         firmwareVersion:
           type: string
           description: "The firmware version to request the update for"
+        safe:
+          type: boolean
+          description: "Whether to safely perform the firmware update"
+          default: true
       required:
         - firmwareVersion
     OffsetConfigPayload:
