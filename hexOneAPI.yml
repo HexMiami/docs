@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.19.0
+  version: 3.21.0
   title: hexONE API
 servers:
   - url: /api
@@ -207,7 +207,7 @@ paths:
       tags:
         - action
       responses:
-        "200":
+        "204":
           description: "Abort command sent successfully"
         default:
           description: Unexpected error
@@ -1028,15 +1028,9 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get Unit Config Descriptions"
-      operationId: api.api.getUnitConfigDescriptions
+      operationId: api.api.get_unit_config_descriptions
       tags:
         - advanced
-      parameters:
-        - name: stationType
-          in: query
-          description: "Determine which unit config to retrieve"
-          schema:
-            type: string
       responses:
         "200":
           description: ""
@@ -1581,8 +1575,9 @@ paths:
                 $ref: "#/components/schemas/ApiError"
   /advanced/update_compressor_pwm:
     post:
-      summary: "Change compressor pwm"
+      summary: "Has no effect."
       operationId: api.api.change_compressor_pwm
+      deprecated: true
       tags:
         - advanced
       security:
@@ -1595,14 +1590,8 @@ paths:
             schema:
               $ref: "#/components/schemas/CompressorPWMPayload"
       responses:
-        "200":
-          description: ""
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: "This API doesn't exist anymore"
   /advanced/update_temperature_thresholds:
     post:
       summary: "Change temperature thresholds"
@@ -2720,13 +2709,13 @@ components:
               enum: [zeroed, extended, zeroing, extending, unknown, unavailable]
             left_grippers:
               type: string
-              enum: [open, close, opening, closing, unknown, unavailable]
+              enum: [open, closed, opening, closing, unknown, unavailable]
             right_grippers:
               type: string
-              enum: [open, close, opening, closing, unknown, unavailable]
+              enum: [open, closed, opening, closing, unknown, unavailable]
             grippers:
               type: string
-              enum: [open, close, opening, closing, unknown, unavailable]
+              enum: [open, closed, opening, closing, unknown, unavailable]
             lights:
               type: string
               enum: [light, dark, unknown]
