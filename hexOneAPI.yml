@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.21.0
+  version: 3.23.0
   title: hexONE API
 servers:
   - url: /api
@@ -1447,6 +1447,30 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/FirmwareVersionPayload"
+  /advanced/request_update_firmware_custom:
+    post:
+      summary: "Custom firmware update"
+      operationId: api.api.firmware_update_custom
+      tags:
+        - advanced
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      responses:
+        "202":
+          description: "Firmware update queued"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FirmwareCustomPayload"
   /advanced/request_update:
     post:
       summary: "Request box update"
@@ -2063,6 +2087,175 @@ paths:
               schema:
                 type: string
                 format: binary
+  /data-offloads/current:
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Push current data offload progress"
+      operationId: api.api.data_offload
+      tags:
+        - storage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataOffload"
+      responses:
+        "202":
+          description: "Offload chunk accepted and queued"
+        "204":
+          description: "Offload finished; offloading turned off"
+        "503":
+          description: "Offloading not currently enabled"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /storage/station/files/:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: List files in station
+      operationId: api.api.station_files_list
+      tags:
+        - storage
+      responses:
+        "200":
+          description: List of files in station
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StorageFile"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /storage/station/files/{key}:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: Download a specific file stored in the station copied from the drone
+      operationId: api.api.station_file_download
+      tags:
+        - storage
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+            format: path
+          description: Key of file stored in the station to download
+      responses:
+        "200":
+          description: Binary file download
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StorageFile"
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      summary: Delete file from station
+      operationId: api.api.station_file_delete
+      tags:
+        - storage
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+            format: path
+      responses:
+        "204":
+          description: File deleted successfully (no content)
+        "404":
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /storage/drone/files/:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: List files on the drone
+      operationId: api.api.drone_files_list
+      tags:
+        - storage
+      responses:
+        "200":
+          description: List of files stored on the drone
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StorageFile"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /storage/drone/files/{key}:
+    delete:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: Delete a file stored on the drone
+      operationId: api.api.drone_file_delete
+      tags:
+        - storage
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+            format: path
+          description: Key value of the file stored in the drone
+      responses:
+        "200":
+          description: "Delete result"
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
   /streaming/watch_stream_request:
     post:
       security:
@@ -2255,33 +2448,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
-    post:
-      security:
-        - bearerAuth: []
-        - cookieBearer: []
-      summary: "Update hexcameras configuration"
-      operationId: api.api.putHexCamerasConfig
-      tags:
-        - streaming
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-      responses:
-        "200":
-          description: "Return the updated hexcameras configuration"
-          content:
-            application/json:
-              schema:
-                type: object
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiError"
   /streaming/turn_server_info:
     get:
       security:
@@ -2377,6 +2543,86 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
+  /ssh/enabled:
+    head:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get if SSH is enabled or not for the 'hexone-remote' user"
+      operationId: api.api.ssh_enabled_check_head
+      tags:
+        - advanced
+      responses:
+        "204":
+          description: "SSH is enabled"
+        "404":
+          description: "SSH is not enabled"
+        default:
+          description: Unexpected error
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get if SSH is enabled or not for the 'hexone-remote' user"
+      operationId: api.api.ssh_enabled_check
+      tags:
+        - advanced
+      responses:
+        "204":
+          description: "SSH is enabled"
+        "404":
+          description: "SSH is not enabled"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /ssh/config:
+    get:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Get current SSH config for the 'hexone-remote' user"
+      operationId: api.api.ssh_config_get
+      tags:
+        - advanced
+      responses:
+        "200":
+          description: "Current SSH configuration"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SSHConfigUpdate"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    put:
+      security:
+        - bearerAuth: []
+        - cookieBearer: []
+      summary: "Update current SSH config for the 'hexone-remote' user"
+      operationId: api.api.ssh_config_update
+      tags:
+        - advanced
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SSHConfigUpdate"
+      responses:
+        "204":
+          description: "SSH config updated"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 
 components:
   securitySchemes:
@@ -2404,6 +2650,7 @@ components:
           rtktoggle,
           swapbattery,
           lightson,
+          lightsdim,
           lightsoff,
           calibrate,
           updategps,
@@ -2480,6 +2727,7 @@ components:
           batteryvision,
           batteryvisionimmediate,
           checkhexcameras,
+          dataoffload,
           checkmotors,
           resetserial,
           restartdriverboard,
@@ -4600,6 +4848,18 @@ components:
           default: true
       required:
         - firmwareVersion
+    FirmwareCustomPayload:
+      type: object
+      properties:
+        binary:
+          type: string
+          description: "URL safe base 64 encoded binary (for Dumbledore/Gandalf) or a tar.gz binary of bootloader.bin, partitions.bin, firmware.bin, and littlefs.bin"
+        safe:
+          type: boolean
+          description: "Whether to safely perform the firmware update"
+          default: true
+      required:
+        - binary
     OffsetConfigPayload:
       type: object
       required:
@@ -4623,6 +4883,55 @@ components:
             - background_update_hexone
             - full_update_hexone
             - reboot_cameras
+    SSHConfigUpdate:
+      type: object
+      required:
+        - enabled
+        - authorized_keys
+      properties:
+        enabled:
+          type: boolean
+        authorized_keys:
+          type: array
+          items:
+            type: string
+    DataOffloadSource:
+      type: string
+      description: "Where the data is being offloaded from"
+      enum:
+        - drone
+        - rc
+    DataOffloadFinish:
+      type: string
+      description: "How the offload session should be finalized"
+      enum:
+        - nothing
+        - unplug
+    DataOffload:
+      type: object
+      required:
+        - source
+        - items
+        - finish
+      properties:
+        source:
+          $ref: "#/components/schemas/DataOffloadSource"
+        items:
+          type: array
+          description: "List of file paths to offload (e.g. DCIM/... from the drone)"
+          items:
+            type: string
+        finish:
+          $ref: "#/components/schemas/DataOffloadFinish"
+    StorageFile:
+      type: object
+      properties:
+        key:
+          type: string
+        modified:
+          type: string
+        size_bytes:
+          type: integer
     ApiError:
       type: object
       required:
