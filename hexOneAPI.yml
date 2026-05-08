@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 3.23.0
+  version: 3.23.16
   title: hexONE API
 servers:
   - url: /api
@@ -8,7 +8,7 @@ paths:
   /auth/login:
     post:
       summary: "Authenticate to box"
-      operationId: api.api.login
+      operationId: api.web.api.login
       tags:
         - auth
       requestBody:
@@ -33,7 +33,7 @@ paths:
   /auth/login_limited:
     post:
       summary: "Authenticate to box for limited access (streaming)"
-      operationId: api.api.login_limited
+      operationId: api.web.api.login_limited
       tags:
         - auth
       requestBody:
@@ -58,7 +58,7 @@ paths:
   /auth/logout:
     post:
       summary: "Deauthenticate to box"
-      operationId: api.api.logout
+      operationId: api.web.api.logout
       tags:
         - auth
       responses:
@@ -73,7 +73,7 @@ paths:
   /auth/change_password:
     post:
       summary: "Change password to box"
-      operationId: api.api.change_password
+      operationId: api.web.api.change_password
       tags:
         - auth
       requestBody:
@@ -97,7 +97,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Log out all sessions"
-      operationId: api.api.sessions_remove_all
+      operationId: api.web.api.sessions_remove_all
       tags:
         - auth
       responses:
@@ -115,7 +115,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Requests HexONE to perform an action. Returns a UUID that you can poll for status via GET /action/{id}"
-      operationId: api.api.performAction
+      operationId: api.web.api.performAction
       tags:
         - action
       requestBody:
@@ -143,7 +143,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current lockout status"
-      operationId: api.api.getLockStatus
+      operationId: api.web.api.getLockStatus
       tags:
         - advanced
       parameters:
@@ -165,7 +165,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Lock the station until a specific timestamp"
-      operationId: api.api.lockStation
+      operationId: api.web.api.lockStation
       tags:
         - advanced
       requestBody:
@@ -187,7 +187,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Unlock the station immediately"
-      operationId: api.api.unlockStation
+      operationId: api.web.api.unlockStation
       tags:
         - advanced
       responses:
@@ -203,7 +203,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Aborts and cancels any inprogess/queued commands"
-      operationId: api.api.performAbort
+      operationId: api.web.api.performAbort
       tags:
         - action
       responses:
@@ -221,7 +221,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Requests HexONE to clear its action queue."
-      operationId: api.api.clearActionQueue
+      operationId: api.web.api.clearActionQueue
       tags:
         - action
       responses:
@@ -239,7 +239,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Requests HexONE to clear its action history, removes done and cancelled commands from recent commands."
-      operationId: api.api.clearActionHistory
+      operationId: api.web.api.clearActionHistory
       tags:
         - action
       responses:
@@ -257,7 +257,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Gets statuses of recent commands."
-      operationId: api.api.getRecentCommands
+      operationId: api.web.api.getRecentCommands
       tags:
         - action
       responses:
@@ -274,8 +274,8 @@ paths:
       security:
         - bearerAuth: []
         - cookieBearer: []
-      summary: "Get information about the action with id {id}"
-      operationId: api.api.getActionStatus
+      summary: "Get information about the action with ID {id}"
+      operationId: api.web.api.getActionStatus
       tags:
         - action
       parameters:
@@ -285,7 +285,7 @@ paths:
             type: string
           example: "f182428c009a47f0a594d7a3a1e91adb"
           required: true
-          description: uuid.v4 of the action to get
+          description: ID of the action to get
       responses:
         "200":
           description: ""
@@ -299,7 +299,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Gets telemetry."
-      operationId: api.api.getTelemetry
+      operationId: api.web.api.getTelemetry
       tags:
         - status
       responses:
@@ -322,7 +322,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get last 6 hours of battery history"
-      operationId: api.api.getBatteryHistory
+      operationId: api.web.api.getBatteryHistory
       tags:
         - status
       parameters:
@@ -356,7 +356,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get last 24 hours of temperature history"
-      operationId: api.api.getTemperatureHistory
+      operationId: api.web.api.getTemperatureHistory
       tags:
         - status
         - temperature
@@ -376,7 +376,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get last 24 hours of voltage history"
-      operationId: api.api.getBoardVoltageHistory
+      operationId: api.web.api.getBoardVoltageHistory
       tags:
         - status
         - board_voltage
@@ -395,7 +395,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get historical system mtrics"
-      operationId: api.api.metrics_get_system
+      operationId: api.web.api.metrics_get_system
       tags:
         - metrics
       parameters:
@@ -432,7 +432,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get historical camera connection status"
-      operationId: api.api.get_camera_metrics
+      operationId: api.web.api.get_camera_metrics
       tags:
         - metrics
       parameters:
@@ -469,7 +469,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get historical motor connection status"
-      operationId: api.api.get_motor_metrics
+      operationId: api.web.api.get_motor_metrics
       tags:
         - metrics
       parameters:
@@ -506,7 +506,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get historical charger data"
-      operationId: api.api.get_charger_metrics
+      operationId: api.web.api.get_charger_metrics
       tags:
         - metrics
       parameters:
@@ -552,7 +552,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get historical board temperature and voltage"
-      operationId: api.api.get_board_metrics
+      operationId: api.web.api.get_board_metrics
       tags:
         - metrics
       parameters:
@@ -589,7 +589,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get metric events report"
-      operationId: api.api.get_event_metrics
+      operationId: api.web.api.get_event_metrics
       tags:
         - metrics
       parameters:
@@ -626,7 +626,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get metric events report"
-      operationId: api.api.get_summary_metrics
+      operationId: api.web.api.get_summary_metrics
       tags:
         - metrics
       parameters:
@@ -663,7 +663,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Toggle (enable or disable) power on battery port #id (1-6)"
-      operationId: api.api.putThingToggle
+      operationId: api.web.api.putThingToggle
       tags:
         - peripherals
       parameters:
@@ -710,7 +710,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets"
-      operationId: api.api.get_sku_offsets
+      operationId: api.web.api.get_sku_offsets
       tags:
         - advanced
       responses:
@@ -725,7 +725,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets"
-      operationId: api.api.put_sku_offsets
+      operationId: api.web.api.put_sku_offsets
       tags:
         - advanced
       requestBody:
@@ -745,7 +745,7 @@ paths:
   /advanced/critical/external_commands:
     post:
       summary: "Sends pre-defined external commands"
-      operationId: api.api.sendExternalCommands
+      operationId: api.web.api.sendExternalCommands
       tags:
         - advanced
       security:
@@ -770,7 +770,7 @@ paths:
   /advanced/change_offset_config:
     post:
       summary: "Change Offset File"
-      operationId: api.api.change_offset_config
+      operationId: api.web.api.change_offset_config
       tags:
         - advanced
       security:
@@ -794,7 +794,7 @@ paths:
   /advanced/schedule_battery_reinsert:
     get:
       summary: "returns the config for the atlas scheduled battery reinsert"
-      operationId: api.api.getScheduledAtlasBatteryReinsert
+      operationId: api.web.api.getScheduledAtlasBatteryReinsert
       tags:
         - advanced
       security:
@@ -809,7 +809,7 @@ paths:
                 $ref: "#/components/schemas/AtlasBatteryReinsertSchedulePayload"
     post:
       summary: "Change Atlas Battery Reinsert Schedule"
-      operationId: api.api.scheduleAtlasBatteryReinsert
+      operationId: api.web.api.scheduleAtlasBatteryReinsert
       tags:
         - advanced
       security:
@@ -833,7 +833,7 @@ paths:
   /advanced/hex_relays_ip_address:
     get:
       summary: "Check current ip address assigned as hex_relays on local network"
-      operationId: api.api.getHexRelaysIpAddress
+      operationId: api.web.api.getHexRelaysIpAddress
       tags:
         - advanced
       security:
@@ -854,7 +854,7 @@ paths:
                 $ref: "#/components/schemas/ApiError"
     post:
       summary: "Update ip address assigned as hex_relays on local network"
-      operationId: api.api.postHexRelaysIpAddress
+      operationId: api.web.api.postHexRelaysIpAddress
       tags:
         - advanced
       security:
@@ -881,7 +881,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets for Atlas"
-      operationId: api.api.get_sku_offsets_atlas
+      operationId: api.web.api.get_sku_offsets_atlas
       tags:
         - advanced
       responses:
@@ -896,7 +896,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets for Atlas"
-      operationId: api.api.put_sku_offsets_atlas
+      operationId: api.web.api.put_sku_offsets_atlas
       tags:
         - advanced
       requestBody:
@@ -919,7 +919,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get default set of sku positions for Atlas"
-      operationId: api.api.get_sku_positions_atlas
+      operationId: api.web.api.get_sku_positions_atlas
       tags:
         - advanced
       responses:
@@ -935,7 +935,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update motor configurations for Atlas"
-      operationId: api.api.putMotorsConfigAtlas
+      operationId: api.web.api.putMotorsConfigAtlas
       tags:
         - advanced
       requestBody:
@@ -958,7 +958,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku offsets"
-      operationId: api.api.get_sku_offsets_uni
+      operationId: api.web.api.get_sku_offsets_uni
       tags:
         - advanced
       responses:
@@ -973,7 +973,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update sku offsets"
-      operationId: api.api.put_sku_offsets_uni
+      operationId: api.web.api.put_sku_offsets_uni
       tags:
         - advanced
       requestBody:
@@ -996,7 +996,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get default set of sku positions for Universal"
-      operationId: api.api.get_sku_positions_uni
+      operationId: api.web.api.get_sku_positions_uni
       tags:
         - advanced
       responses:
@@ -1012,7 +1012,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current set of sku descriptions"
-      operationId: api.api.getSkuDescriptionsUni
+      operationId: api.web.api.getSkuDescriptionsUni
       tags:
         - advanced
       responses:
@@ -1028,7 +1028,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get Unit Config Descriptions"
-      operationId: api.api.get_unit_config_descriptions
+      operationId: api.web.api.get_unit_config_descriptions
       tags:
         - advanced
       responses:
@@ -1050,7 +1050,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get latest errors for each command"
-      operationId: api.api.getErrorHistory
+      operationId: api.web.api.getErrorHistory
       tags:
         - advanced
       responses:
@@ -1066,7 +1066,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get overall latest errors"
-      operationId: api.api.getErrorList
+      operationId: api.web.api.getErrorList
       tags:
         - advanced
       responses:
@@ -1082,7 +1082,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get overall latest warnings"
-      operationId: api.api.getWarnList
+      operationId: api.web.api.getWarnList
       tags:
         - advanced
       responses:
@@ -1098,7 +1098,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get firmware versions array"
-      operationId: api.api.getFirmwareVersions
+      operationId: api.web.api.getFirmwareVersions
       tags:
         - advanced
       responses:
@@ -1112,7 +1112,7 @@ paths:
                   type: string
     post:
       summary: "Request update firmware versions list"
-      operationId: api.api.updateFirmwareVersionsList
+      operationId: api.web.api.updateFirmwareVersionsList
       tags:
         - advanced
       security:
@@ -1130,7 +1130,7 @@ paths:
   /advanced/batteries/enabled_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
-      operationId: api.api.getEnabledBatteries
+      operationId: api.web.api.getEnabledBatteries
       tags:
         - advanced
       security:
@@ -1145,7 +1145,7 @@ paths:
                 $ref: "#/components/schemas/BatterySlotsMask"
     post:
       summary: "update which batteries are enabled"
-      operationId: api.api.postEnabledBatteries
+      operationId: api.web.api.postEnabledBatteries
       tags:
         - advanced
       security:
@@ -1167,7 +1167,7 @@ paths:
   /advanced/batteries/enabled_slots_atlas:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery is enabled (pickable by swapbattery)"
-      operationId: api.api.getEnabledBatteriesAtlas
+      operationId: api.web.api.getEnabledBatteriesAtlas
       tags:
         - advanced
       security:
@@ -1182,7 +1182,7 @@ paths:
                 $ref: "#/components/schemas/BatterySlotsMaskAtlas"
     post:
       summary: "update which batteries are enabled"
-      operationId: api.api.postEnabledBatteriesAtlas
+      operationId: api.web.api.postEnabledBatteriesAtlas
       tags:
         - advanced
       security:
@@ -1204,7 +1204,7 @@ paths:
   /advanced/batteries/enabled_placement_slots:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery slot is full (occupied by a battery)"
-      operationId: api.api.getPlacementBatteries
+      operationId: api.web.api.getPlacementBatteries
       tags:
         - advanced
       security:
@@ -1219,7 +1219,7 @@ paths:
                 $ref: "#/components/schemas/BatteryPlacementMask"
     post:
       summary: "update which battery slots are occupied"
-      operationId: api.api.postPlacementBatteries
+      operationId: api.web.api.postPlacementBatteries
       tags:
         - advanced
       security:
@@ -1241,7 +1241,7 @@ paths:
   /advanced/batteries/enabled_placement_slots_atlas:
     get:
       summary: "returns an array of booleans where a[i] is True if the ith battery slot is full (occupied by a battery)"
-      operationId: api.api.getPlacementBatteriesAtlas
+      operationId: api.web.api.getPlacementBatteriesAtlas
       tags:
         - advanced
       security:
@@ -1256,7 +1256,7 @@ paths:
                 $ref: "#/components/schemas/BatteryPlacementMaskAtlas"
     post:
       summary: "update which battery slots are occupied"
-      operationId: api.api.postPlacementBatteriesAtlas
+      operationId: api.web.api.postPlacementBatteriesAtlas
       tags:
         - advanced
       security:
@@ -1278,7 +1278,7 @@ paths:
   /advanced/batteries/enabled_unit_config_atlas:
     get:
       summary: "returns an array of booleans that represents different unit configurations"
-      operationId: api.api.unit_config_get
+      operationId: api.web.api.unit_config_get
       tags:
         - advanced
       security:
@@ -1293,7 +1293,7 @@ paths:
                 $ref: "#/components/schemas/UnitConfigAtlas"
     post:
       summary: "update which unit configuration is activated"
-      operationId: api.api.unit_config_post
+      operationId: api.web.api.unit_config_post
       tags:
         - advanced
       security:
@@ -1315,7 +1315,7 @@ paths:
   /advanced/batteries/enabled_unit_config_uni:
     get:
       summary: "returns an array of booleans that represents different unit configurations"
-      operationId: api.api.getUnitConfigUni
+      operationId: api.web.api.getUnitConfigUni
       tags:
         - advanced
       security:
@@ -1330,7 +1330,7 @@ paths:
                 $ref: "#/components/schemas/UnitConfigUni"
     post:
       summary: "update which unit configuration is activated"
-      operationId: api.api.postUnitConfigUni
+      operationId: api.web.api.postUnitConfigUni
       tags:
         - advanced
       security:
@@ -1352,7 +1352,7 @@ paths:
   /advanced/batteries/enabled_unit_config_global:
     get:
       summary: "returns an array of booleans that represents different unit configurations"
-      operationId: api.api.getUnitConfigGlobal
+      operationId: api.web.api.getUnitConfigGlobal
       tags:
         - advanced
       security:
@@ -1367,7 +1367,7 @@ paths:
                 $ref: "#/components/schemas/UnitConfigGlobal"
     post:
       summary: "update which unit configuration is activated"
-      operationId: api.api.postUnitConfigGlobal
+      operationId: api.web.api.postUnitConfigGlobal
       tags:
         - advanced
       security:
@@ -1389,7 +1389,7 @@ paths:
   /advanced/battery_memory:
     get:
       summary: "returns an array with one boolean where if true, remember the battery positions at boot (don't overwrite) and set has_discovered to true "
-      operationId: api.api.getBatteryMemory
+      operationId: api.web.api.getBatteryMemory
       tags:
         - advanced
       security:
@@ -1404,7 +1404,7 @@ paths:
                 $ref: "#/components/schemas/BatteryMemory"
     post:
       summary: "update battery memory status"
-      operationId: api.api.postBatteryMemory
+      operationId: api.web.api.postBatteryMemory
       tags:
         - advanced
       security:
@@ -1426,7 +1426,7 @@ paths:
   /advanced/request_update_firmware:
     post:
       summary: "Request station firmware update"
-      operationId: api.api.requestUpdateFirmware
+      operationId: api.web.api.requestUpdateFirmware
       tags:
         - advanced
       security:
@@ -1450,7 +1450,7 @@ paths:
   /advanced/request_update_firmware_custom:
     post:
       summary: "Custom firmware update"
-      operationId: api.api.firmware_update_custom
+      operationId: api.web.api.firmware_update_custom
       tags:
         - advanced
       security:
@@ -1474,7 +1474,7 @@ paths:
   /advanced/request_update:
     post:
       summary: "Request box update"
-      operationId: api.api.request_update
+      operationId: api.web.api.request_update
       tags:
         - advanced
       security:
@@ -1492,7 +1492,7 @@ paths:
   /advanced/battery_current_offsets:
     post:
       summary: "Adjust battery current offsets"
-      operationId: api.api.battery_current_offsets
+      operationId: api.web.api.battery_current_offsets
       tags:
         - advanced
       security:
@@ -1510,7 +1510,7 @@ paths:
   /advanced/battery_current_offsets_reset:
     post:
       summary: "Reset battery current offsets"
-      operationId: api.api.battery_current_offsets_reset
+      operationId: api.web.api.battery_current_offsets_reset
       tags:
         - advanced
       security:
@@ -1528,7 +1528,7 @@ paths:
   /advanced/update_custom_title:
     post:
       summary: "Change custom title of station"
-      operationId: api.api.change_custom_title
+      operationId: api.web.api.change_custom_title
       tags:
         - advanced
       security:
@@ -1552,7 +1552,7 @@ paths:
   /advanced/update_weather_api_key:
     post:
       summary: "Change weather api key in box"
-      operationId: api.api.store_weather_apikey
+      operationId: api.web.api.store_weather_apikey
       tags:
         - advanced
       security:
@@ -1576,7 +1576,7 @@ paths:
   /advanced/manual_serial:
     post:
       summary: "Add manual serial command"
-      operationId: api.api.add_manual_serial_command
+      operationId: api.web.api.add_manual_serial_command
       tags:
         - advanced
       security:
@@ -1600,7 +1600,7 @@ paths:
   /advanced/update_compressor_pwm:
     post:
       summary: "Has no effect."
-      operationId: api.api.change_compressor_pwm
+      operationId: api.web.api.change_compressor_pwm
       deprecated: true
       tags:
         - advanced
@@ -1619,7 +1619,7 @@ paths:
   /advanced/update_temperature_thresholds:
     post:
       summary: "Change temperature thresholds"
-      operationId: api.api.change_temperature_thresholds
+      operationId: api.web.api.change_temperature_thresholds
       tags:
         - advanced
       security:
@@ -1643,7 +1643,7 @@ paths:
   /advanced/weather_thresholds:
     get:
       summary: "Check current weather thresholds"
-      operationId: api.api.getWeatherThresholds
+      operationId: api.web.api.getWeatherThresholds
       tags:
         - advanced
       security:
@@ -1664,7 +1664,7 @@ paths:
                 $ref: "#/components/schemas/ApiError"
     post:
       summary: "Change weather thresholds"
-      operationId: api.api.postWeatherThresholds
+      operationId: api.web.api.postWeatherThresholds
       tags:
         - advanced
       security:
@@ -1689,7 +1689,7 @@ paths:
   /advanced/update_weatherflow_api:
     post:
       summary: "Update weatherflow api token"
-      operationId: api.api.update_weatherflow_api
+      operationId: api.web.api.update_weatherflow_api
       tags:
         - advanced
       security:
@@ -1713,7 +1713,7 @@ paths:
   /demo:
     get:
       summary: "Get current demo mode status"
-      operationId: api.api.get_demo_status
+      operationId: api.web.api.get_demo_status
       tags:
         - demo
       security:
@@ -1739,7 +1739,7 @@ paths:
   /demo/config:
     post:
       summary: "Update the demo configuration"
-      operationId: api.api.post_demo_config
+      operationId: api.web.api.post_demo_config
       tags:
         - demo
       security:
@@ -1762,7 +1762,7 @@ paths:
   /demo/mode:
     put:
       summary: "Enable Demo Mode"
-      operationId: api.api.enable_demo_mode
+      operationId: api.web.api.enable_demo_mode
       tags:
         - demo
       security:
@@ -1779,7 +1779,7 @@ paths:
                 $ref: "#/components/schemas/ApiError"
     delete:
       summary: "Disable Demo Mode"
-      operationId: api.api.disable_demo_mode
+      operationId: api.web.api.disable_demo_mode
       tags:
         - demo
       security:
@@ -1797,7 +1797,7 @@ paths:
   /health:
     get:
       summary: "Returns a 200 if we are online"
-      operationId: api.api.health
+      operationId: api.web.api.health
       tags:
         - status
       responses:
@@ -1812,7 +1812,7 @@ paths:
   /version:
     get:
       summary: "Get HexONE Version"
-      operationId: api.api.getHexOneVersion
+      operationId: api.web.api.getHexOneVersion
       tags:
         - version
       responses:
@@ -1833,7 +1833,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get HexONE API Logs"
-      operationId: api.api.getHexOneLogs
+      operationId: api.web.api.getHexOneLogs
       tags:
         - logs
       responses:
@@ -1850,7 +1850,7 @@ paths:
         Generates a replay from the latest segments.
         If no `id` is given, one will be generated.
         If an `id` is provided and already exists, the request is rejected.
-      operationId: api.api.createManualReplay
+      operationId: api.web.api.createManualReplay
       tags:
         - replay
       requestBody:
@@ -1889,7 +1889,7 @@ paths:
     get:
       summary: Get list of replay files with metadata
       description: Returns a list of replay files including job_id, size, and creation time.
-      operationId: api.api.getReplaysList
+      operationId: api.web.api.getReplaysList
       tags:
         - replay
       responses:
@@ -1909,7 +1909,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get replay video by replay_id (supports inline playback and partial content)"
-      operationId: api.api.getReplayById
+      operationId: api.web.api.getReplayById
       tags:
         - replay
       parameters:
@@ -1981,7 +1981,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to immediately update camera images"
-      operationId: api.api.updateHexCameraImages
+      operationId: api.web.api.updateHexCameraImages
       tags:
         - advanced
       parameters:
@@ -2011,7 +2011,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get HexCamera Image"
-      operationId: api.api.getHexCameraImage
+      operationId: api.web.api.getHexCameraImage
       tags:
         - logs
       parameters:
@@ -2041,7 +2041,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get HexCamera Image Updated Time"
-      operationId: api.api.getHexCameraImageUpdatedTime
+      operationId: api.web.api.getHexCameraImageUpdatedTime
       tags:
         - logs
       parameters:
@@ -2070,7 +2070,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get Battery Vision Pictures"
-      operationId: api.api.getBatteryVisionPic
+      operationId: api.web.api.getBatteryVisionPic
       tags:
         - logs
       parameters:
@@ -2093,7 +2093,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Push current data offload progress"
-      operationId: api.api.data_offload
+      operationId: api.web.api.data_offload
       tags:
         - storage
       requestBody:
@@ -2121,7 +2121,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: List files in station
-      operationId: api.api.station_files_list
+      operationId: api.web.api.station_files_list
       tags:
         - storage
       responses:
@@ -2145,7 +2145,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: Download a specific file stored in the station copied from the drone
-      operationId: api.api.station_file_download
+      operationId: api.web.api.station_file_download
       tags:
         - storage
       parameters:
@@ -2177,7 +2177,7 @@ paths:
                 $ref: "#/components/schemas/ApiError"
     delete:
       summary: Delete file from station
-      operationId: api.api.station_file_delete
+      operationId: api.web.api.station_file_delete
       tags:
         - storage
       parameters:
@@ -2208,7 +2208,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: List files on the drone
-      operationId: api.api.drone_files_list
+      operationId: api.web.api.drone_files_list
       tags:
         - storage
       responses:
@@ -2232,7 +2232,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: Delete a file stored on the drone
-      operationId: api.api.drone_file_delete
+      operationId: api.web.api.drone_file_delete
       tags:
         - storage
       parameters:
@@ -2262,7 +2262,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to watch a webrtc stream"
-      operationId: api.api.watchStreamRequest
+      operationId: api.web.api.watchStreamRequest
       tags:
         - streaming
       requestBody:
@@ -2290,7 +2290,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send ICE candidates for webrtc streaming"
-      operationId: api.api.sendIceCandidate
+      operationId: api.web.api.sendIceCandidate
       tags:
         - streaming
       requestBody:
@@ -2318,7 +2318,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send ICE candidate transfer complete flag for webrtc streaming"
-      operationId: api.api.sendIceComplete
+      operationId: api.web.api.sendIceComplete
       tags:
         - streaming
       requestBody:
@@ -2346,7 +2346,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to start the webrtc stream"
-      operationId: api.api.startStreamRequest
+      operationId: api.web.api.startStreamRequest
       tags:
         - streaming
       requestBody:
@@ -2374,7 +2374,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to stop a webrtc stream "
-      operationId: api.api.stopStreamRequest
+      operationId: api.web.api.stopStreamRequest
       tags:
         - streaming
       requestBody:
@@ -2402,7 +2402,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to get available hexameras"
-      operationId: api.api.checkAvailableHexcameras
+      operationId: api.web.api.checkAvailableHexcameras
       tags:
         - streaming
       parameters:
@@ -2432,7 +2432,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get hexcameras configuration"
-      operationId: api.api.getHexCamerasConfig
+      operationId: api.web.api.getHexCamerasConfig
       tags:
         - streaming
       responses:
@@ -2454,7 +2454,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to get TURN and STUN server info"
-      operationId: api.api.turnServerInfo
+      operationId: api.web.api.turnServerInfo
       tags:
         - streaming
       responses:
@@ -2475,7 +2475,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update the TURN and STUN server configuration for streaming"
-      operationId: api.api.updateTurnServerInfo
+      operationId: api.web.api.updateTurnServerInfo
       tags:
         - streaming
       requestBody:
@@ -2499,7 +2499,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send current time as a heartbeat ping to keep stream session open"
-      operationId: api.api.streamHeartbeatPing
+      operationId: api.web.api.streamHeartbeatPing
       tags:
         - streaming
       requestBody:
@@ -2527,7 +2527,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Send request to get auth for dashboard mqtt connection"
-      operationId: api.api.mqttDashboardAuth
+      operationId: api.web.api.mqttDashboardAuth
       tags:
         - advanced
       responses:
@@ -2549,7 +2549,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get if SSH is enabled or not for the 'hexone-remote' user"
-      operationId: api.api.ssh_enabled_check_head
+      operationId: api.web.api.ssh_enabled_check_head
       tags:
         - advanced
       responses:
@@ -2564,7 +2564,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get if SSH is enabled or not for the 'hexone-remote' user"
-      operationId: api.api.ssh_enabled_check
+      operationId: api.web.api.ssh_enabled_check
       tags:
         - advanced
       responses:
@@ -2584,7 +2584,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Get current SSH config for the 'hexone-remote' user"
-      operationId: api.api.ssh_config_get
+      operationId: api.web.api.ssh_config_get
       tags:
         - advanced
       responses:
@@ -2605,7 +2605,7 @@ paths:
         - bearerAuth: []
         - cookieBearer: []
       summary: "Update current SSH config for the 'hexone-remote' user"
-      operationId: api.api.ssh_config_update
+      operationId: api.web.api.ssh_config_update
       tags:
         - advanced
       requestBody:
@@ -2629,12 +2629,12 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      x-bearerInfoFunc: api.api.verify_token
+      x-bearerInfoFunc: api.web.api.verify_token
     cookieBearer:
       type: apiKey
       name: token
       in: cookie
-      x-apikeyInfoFunc: api.api.verify_apikey
+      x-apikeyInfoFunc: api.web.api.verify_apikey
   schemas:
     Command:
       type: string
